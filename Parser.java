@@ -173,6 +173,58 @@ public class Parser{
 		        	return LOW_Y;
 		        case "z":
 		        	return LOW_Z;
+		        case "A":
+		        	return UP_A;
+		        case "B":
+		        	return UP_B;
+		        case "C":
+		        	return UP_C;
+		        case "D":
+		        	return UP_D;
+		        case "E":
+		        	return UP_E;
+		        case "F":
+		        	return UP_F;
+		        case "G":
+		        	return UP_G;
+		        case "H":
+		        	return UP_H;
+		        case "I":
+		        	return UP_I;
+		        case "J":
+		        	return UP_J;
+		        case "K":
+		        	return UP_K;
+		        case "L":
+		        	return UP_L;
+		        case "M":
+		        	return UP_M;
+		        case "N":
+		        	return UP_N;
+		        case "O":
+		        	return UP_O;
+		        case "P":
+		        	return UP_P;
+		        case "Q":
+		        	return UP_Q;
+		        case "R":
+		        	return UP_R;
+		        case "S":
+		        	return UP_S;	
+		        case "T":
+		        	return UP_T;
+		        case "U":
+		        	return UP_U;
+		        case "V":
+		        	return UP_V;
+		        case "W":
+		        	return UP_W;
+		        case "X":
+		        	return UP_X;
+		       	case "Y":
+		       		return UP_Y;
+		       	case "Z":
+		       		return UP_Z;
 		        default:
 		            return null;
 		    }
