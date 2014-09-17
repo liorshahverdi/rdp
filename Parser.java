@@ -233,8 +233,26 @@ public class Parser{
 
 	public static void getNextToken(){
 		nextStr = file.next();
-		System.out.println("------------->"+nextStr);
+		nextToken = Token.getEnum(nextStr);
+		if (nextToken == null){
+			System.out.println("INVALID ==> "+nextStr);
+			System.exit(0);
+		}
 	}
+
+	public boolean block() { return true; }
+
+	public boolean program(){
+		if (block()){
+			if (nextToken == Token.END_OF_INPUT) return true;
+			else return false;
+		}
+		else return false;
+	}
+
+	/*public class ParseException extends Exception{
+		public static ParseException(String s) { super(s); }
+	}*/
 	
 	public static void main(String[] args){
 		System.out.print("Enter a filename.. ");
