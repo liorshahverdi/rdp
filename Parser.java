@@ -246,11 +246,36 @@ public class Parser{
 
 	
 
-	public boolean selectionStat() { return true; }
+	
 
 	public boolean iterativeStat() { return true; }
 
 	public boolean expression() { return true; }
+	
+	public boolean selectionStat() {
+		if (nextToken == Token.IF){
+			getNextToken();
+			if (condition()) {
+				if (nextToken == Token.THEN) {
+					getNextToken();
+					if (statement()) {
+						if (nextToken == Token.ELSE) {
+							getNextToken();
+							if (statement()){
+								return true;
+							}
+							else return false;
+						}
+						else return false;
+					}
+					else return false;
+				}
+				else return false;
+			}
+			else return false;
+		}
+		else return false;
+	}
 	
 	public boolean compoundStat() { 
 		if (nextToken == Token.BEGIN) {
