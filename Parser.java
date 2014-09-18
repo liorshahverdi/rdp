@@ -244,14 +244,35 @@ public class Parser{
 
 	public boolean number() { return true; }
 
-	public boolean compoundStat() { return true; }
+	
 
 	public boolean selectionStat() { return true; }
 
 	public boolean iterativeStat() { return true; }
 
 	public boolean expression() { return true; }
-
+	
+	public boolean compoundStat() { 
+		if (nextToken == Token.BEGIN) {
+			getNextToken();
+			if (statement()) {
+				while(nextToken == Token.SEMICOLON){
+					getNextToken();
+					if (statement()){
+						continue;
+					}
+				}
+				if (nextToken == Token.END){
+					getNextToken();
+					return true;
+				}
+				else return false;
+			}
+			else return false;
+		}
+		else return false; 
+	}
+	
 	public boolean procedureCallStat(){
 		if (nextToken == Token.CALL){
 			getNextToken();
