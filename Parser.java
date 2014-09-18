@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-//how does the program determine the enum type of nextToken?
 
 public class Parser{
 		
@@ -19,7 +18,8 @@ public class Parser{
 			System.exit(0);
 		}
 		getNextToken();
-
+		if (program()) System.out.println("Program complete!");
+		else System.out.println("Error!");
 	}
 
 	public enum Token{
@@ -240,7 +240,67 @@ public class Parser{
 		}
 	}
 
-	public boolean block() { return true; }
+	public boolean ident() { return true; }
+
+	public boolean number() { return true; }
+
+	public boolean block(){
+		if (nextToken == Token.CONSTANT) {
+			getNextToken();
+			if (ident()) {
+				if (nextToken == Token.EQUAL){
+					getNextToken();
+					if (number()){
+						while (nextToken == Token.COMMA){
+							getNextToken();
+							if (ident()){
+								if (nextToken == Token.EQUAL){
+									if (number()){
+										continue;
+									}
+								}	
+							}
+						}
+						if (nextToken == Token.SEMICOLON){
+							getNextToken();
+						}
+					}
+				}
+			}
+		}
+		if (nextToken == Token.VARIABLE){
+			getNextToken();
+			if (ident()){
+				while (nextToken == Token.COMMA){
+					getNextToken();
+					if (ident()){
+						continue;
+					}
+				}
+				if (nextToken == Token.SEMICOLON){
+					getNextToken();
+				}				
+			}
+		}
+		while (nextToken == Token.PROCEDURE){
+			getNextToken();
+			if (ident()) {
+				if (nextToken == Token.SEMICOLON){
+					getNextToken();
+					if (block()) {
+						continue;
+					}
+				}
+			}
+		}
+		if (statement()) {
+			return true;
+		}
+		else {
+			System.out.println("Statement syntax error!\t"+nextStr);
+			return false;
+		}
+	}
 
 	public boolean program(){
 		if (block()){
