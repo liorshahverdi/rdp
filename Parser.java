@@ -244,6 +244,25 @@ public class Parser{
 
 	public boolean number() { return true; }
 
+	public boolean compoundStat() { return true; }
+
+	public boolean selectionStat() { return true; }
+
+	public boolean iterativeStat() { return true; }
+
+	public boolean expression() { return true; }
+
+	public boolean procedureCallStat(){
+		if (nextToken == Token.CALL){
+			getNextToken();
+			if (ident()) {
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+
 	public boolean assignmentStat(){
 		if (ident()){
 			if (nextToken == Token.ASSIGN_EQUAL){
