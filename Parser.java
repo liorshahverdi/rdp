@@ -244,14 +244,26 @@ public class Parser{
 
 	public boolean number() { return true; }
 
-	
-
-	
-
-	public boolean iterativeStat() { return true; }
-
 	public boolean expression() { return true; }
 	
+	public boolean iterativeStat() {
+		if (nextToken == Token.WHILE){
+			getNextToken();
+			if (condition()) {
+				if (nextToken == Token.DO){
+					getNextToken();
+					if (statement()){
+						return true;
+					}
+					else return false;
+				}
+				else return false;
+			}
+			else return false;
+		}
+		else return false;
+	}
+
 	public boolean selectionStat() {
 		if (nextToken == Token.IF){
 			getNextToken();
