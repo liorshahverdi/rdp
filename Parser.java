@@ -244,7 +244,39 @@ public class Parser{
 
 	public boolean number() { return true; }
 
-	public boolean expression() { return true; }
+	public boolean term() {
+		if (factor()) {
+			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
+				getNextToken();
+				if (factor()) {
+					continue;
+				}
+				else return false;
+			}
+			return true;
+		}
+		else return false;
+	}
+
+	public boolean expression() {
+		if (nextToken == Token.PLUS){
+			getNextToken();
+		}
+		else if (nextToken == Token.MINUS){
+			getNextToken();
+		} 
+		if (term()) {
+			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
+				getNextToken();
+				if (term()){
+					continue;
+				}
+				else return false;
+			}
+			return true;
+		}
+		else return false;
+	}
 
 	public boolean relOp() {
 		if (nextToken == Token.EQUAL){
