@@ -244,6 +244,27 @@ public class Parser{
 
 	public boolean number() { return true; }
 
+	public boolean factor() {
+		if (ident()) {
+			return true;
+		}
+		else if (number()) {
+			return true;
+		}
+		else if (nextToken == Token.OPENPAREN){
+			getNextToken();
+			if (expression()) {
+				if (nextToken == Token.CLOSEPAREN){
+					getNextToken();
+					return true;
+				}
+				else return false;
+			}
+			else return false;
+		}
+		else return false;
+	}
+
 	public boolean term() {
 		if (factor()) {
 			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
