@@ -23,19 +23,19 @@ public class Parser{
 	}
 
 	public enum Token{
-		CONSTANT, VARIABLE, PROCEDURE, CALL, BEGIN, END,
-		IF, THEN, ELSE, WHILE, DO, OPENPAREN, CLOSEPAREN,
-		COMMA, SEMICOLON, ASSIGN_EQUAL,
-		EQUAL, NOT_EQUAL, LESS_THAN, GREATER_THAN, LESS_THAN_EQUAL_TO, GREATER_THAN_EQUAL_TO,
-		PLUS, MINUS, MULTIPLY, DIVIDE,
-		ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
-		LOW_A, LOW_B, LOW_C, LOW_D, LOW_E, LOW_F, LOW_G, LOW_H, LOW_I,
-		LOW_J, LOW_K, LOW_L, LOW_M, LOW_N, LOW_O, LOW_P, LOW_Q, LOW_R, LOW_S,
-		LOW_T, LOW_U, LOW_V, LOW_W, LOW_X, LOW_Y, LOW_Z, 
-		UP_A, UP_B, UP_C, UP_D, UP_E, UP_F, UP_G, UP_H, UP_I, UP_J, UP_K,
-		UP_L, UP_M, UP_N, UP_O, UP_P, UP_Q, UP_R, UP_S, UP_T, UP_U, UP_V, UP_W,
-		UP_X, UP_Y, UP_Z,
-		END_OF_INPUT;
+		CONSTANT("const"), VARIABLE("var"), PROCEDURE("procedure"), CALL("call"), BEGIN("begin"), END("end"),
+		IF("if"), THEN("then"), ELSE("else"), WHILE("while"), DO("do"), OPENPAREN("("), CLOSEPAREN(")"),
+ 		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
+ 		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
+		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
+ 		ZERO("0"), ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"),
+ 		LOW_A("a"), LOW_B("b"), LOW_C("c"), LOW_D("d"), LOW_E("e"), LOW_F("f"), LOW_G("g"), LOW_H("h"), LOW_I("i"),
+ 		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
+ 		LOW_T("t"), LOW_U("u"), LOW_V("v"), LOW_W("w"), LOW_X("x"), LOW_Y("y"), LOW_Z("z"),
+ 		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
+ 		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), UP_W("W"),
+ 		UP_X("X"), UP_Y("Y"), UP_Z("Z"),
+ 		END_OF_INPUT("$");
 		
 		private String str;
 
@@ -359,32 +359,17 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean relOp() {
-		if (nextToken == Token.EQUAL){
-			getNextToken();
-			return true;
+	public boolean relOp(){
+		switch (nextToken) {
+			case EQUAL: case NOT_EQUAL: case LESS_THAN:
+			case GREATER_THAN: case LESS_THAN_EQUAL_TO: case GREATER_THAN_EQUAL_TO: {
+				getNextToken();
+				return true;
+			}
+			default: {
+				return false;
+			}
 		}
-		else if (nextToken == Token.NOT_EQUAL){
-			getNextToken();
-			return true;
-		}
-		else if (nextToken == Token.LESS_THAN){
-			getNextToken();
-			return true;
-		}
-		else if (nextToken == Token.GREATER_THAN){
-			getNextToken();
-			return true;
-		}
-		else if (nextToken == Token.LESS_THAN_EQUAL_TO){
-			getNextToken();
-			return true;
-		}
-		else if (nextToken == Token.GREATER_THAN_EQUAL_TO){
-			getNextToken();
-			return true;
-		}
-		else return false;
 	}
 
 	public boolean condition() {
