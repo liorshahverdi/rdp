@@ -245,6 +245,47 @@ public class Parser{
 	public boolean number() { return true; }
 
 	public boolean expression() { return true; }
+
+	public boolean relOp() {
+		if (nextToken == Token.EQUAL){
+			getNextToken();
+			return true;
+		}
+		else if (nextToken == Token.NOT_EQUAL){
+			getNextToken();
+			return true;
+		}
+		else if (nextToken == Token.LESS_THAN){
+			getNextToken();
+			return true;
+		}
+		else if (nextToken == Token.GREATER_THAN){
+			getNextToken();
+			return true;
+		}
+		else if (nextToken == Token.LESS_THAN_EQUAL_TO){
+			getNextToken();
+			return true;
+		}
+		else if (nextToken == Token.GREATER_THAN_EQUAL_TO){
+			getNextToken();
+			return true;
+		}
+		else return false;
+	}
+
+	public boolean condition() {
+		if (expression()){
+			if (relOp()) {
+				if (expression()){
+					return true;
+				}
+				else return false;
+			}
+			else return false;
+		}
+		else return false;
+	}
 	
 	public boolean iterativeStat() {
 		if (nextToken == Token.WHILE){
