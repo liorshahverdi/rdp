@@ -28,6 +28,7 @@ public class Parser{
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
+		NUMBER("0110"),
  		ZERO("0"), ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"),
  		LOW_A("a"), LOW_B("b"), LOW_C("c"), LOW_D("d"), LOW_E("e"), LOW_F("f"), LOW_G("g"), LOW_H("h"), LOW_I("i"),
  		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
@@ -35,6 +36,7 @@ public class Parser{
  		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
  		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), UP_W("W"),
  		UP_X("X"), UP_Y("Y"), UP_Z("Z"),
+ 		USER_DEFINED_NAME("---"),
  		END_OF_INPUT("$");
 		
 		private String str;
@@ -47,7 +49,16 @@ public class Parser{
     		return str;
 		}
 
-		public static Token getEnum(String str){
+		public static Token getEnum(String str) {
+			for (Token t: Token.values()){
+				if (str.equals(t.getStr())){
+					return t;
+				}
+			}
+			return null;
+		}
+
+		/*public static Token getEnum(String str){
 			switch (str) {
 		        case "const":
 		            return CONSTANT;
@@ -228,15 +239,21 @@ public class Parser{
 		        default:
 		            return null;
 		    }
-		}
+		}*/
 	}
 
 	public static void getNextToken(){
 		nextStr = file.next();
 		nextToken = Token.getEnum(nextStr);
+		System.out.println("**\t"+nextToken);
+		if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) nextToken = Token.USER_DEFINED_NAME;
+		if (nextStr.matches("[0-9]*")) nextToken = Token.NUMBER;
+		System.out.println("**\t"+nextToken);
+		
 		if (nextToken == null){
+			//didn't find proper enum
 			System.out.println("INVALID ==> "+nextStr);
-			System.exit(0);
+			System.exit(0);	
 		}
 	}
 
@@ -285,23 +302,25 @@ public class Parser{
 	}
 
 	public boolean number() {
-		if (digit()) {
+		/*if (digit()) {
 			while (digit()) {
 				continue;
 			}
 			return true;
 		}
-		else return false;
+		else return false;*/
+		return true;
 	}
 
 	public boolean ident() {
-		if (letter()) {
+		/*if (letter()) {
 			while ( letter() || digit() ) {
 				continue;
 			}
 			return true;
 		}
-		else return false;
+		else return false;*/
+		return true;
 	}
 
 	public boolean factor() {
