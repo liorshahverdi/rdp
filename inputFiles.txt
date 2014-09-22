@@ -1,0 +1,17 @@
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat asgnstmt.txt
+x123 := x345 + 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat compoundStmt.txt
+begin x123 := 5 + 7 ; k715 := 45 * 3 end $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat iterativeStmt.txt
+while 909 + 3 >= 5 - 4 do call f321 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat procedureCallStmt.txt
+call x123 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat selectionStmt.txt
+if 6 < 7 then x123 := 7 else x123 := 9 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$
