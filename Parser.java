@@ -179,22 +179,25 @@ public class Parser{
 	}
 
 	public static boolean expression() {
-		System.out.println("Made it to expression!");
+		System.out.println("Made it to expression! nt = "+nextToken);
 		if (nextToken == Token.PLUS){
 			getNextToken();
 		}
 		else if (nextToken == Token.MINUS){
 			getNextToken();
 		} 
+
+		System.out.println("??\tnt = "+nextToken);
 		if (term()) {
 			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
 				getNextToken();
 				if (term()){
+					System.out.println("oh woww");
 					continue;
 				}
 				else return false;
 			}
-			System.out.println("True indeed");
+			System.out.println("True indeed\tnt = "+nextToken);
 			return true;
 		}
 		else return false;
@@ -214,28 +217,41 @@ public class Parser{
 	}
 
 	public static boolean condition() {
+		System.out.println("Condition reached! nt = "+nextToken);
 		if (expression()){
+			System.out.println("Expression true! nt ="+nextToken);
 			if (relOp()) {
 				if (expression()){
+					System.out.println("Expression true! nt ="+nextToken);
 					return true;
 				}
 				else return false;
 			}
-			else return false;
+			else {
+				System.out.println("relOp is TOTALLY NOT true! nt ="+nextToken+"\tstr = "+nextStr);
+				return false;
+			}
 		}
 		else return false;
 	}
 	
 	public static boolean iterativeStat() {
+		System.out.println("And so they entered into the iterative.. nt = "+nextToken);
 		if (nextToken == Token.WHILE){
 			getNextToken();
+			System.out.println("nt = "+nextToken+" while down");
 			if (condition()) {
+				System.out.println("Condition down nt = "+nextToken);
 				if (nextToken == Token.DO){
 					getNextToken();
 					if (statement()){
 						return true;
 					}
-					else return false;
+					else {
+						System.out.println("nt = "+nextToken);
+						return false;
+					}
+				
 				}
 				else return false;
 			}
@@ -245,7 +261,7 @@ public class Parser{
 	}
 
 	public static boolean selectionStat() {
-		System.out.println("selectionStat reached! mytoken -> "+nextToken);
+		System.out.println("selectionStat reached OOO! mytoken -> "+nextToken);
 		if (nextToken == Token.IF){
 			getNextToken();
 			if (condition()) {
@@ -267,7 +283,11 @@ public class Parser{
 			}
 			else return false;
 		}
-		else return false;
+		else 
+			{
+				System.out.println("Landing? nt = "+nextToken);
+				return false;
+			}
 	}
 	
 	public static boolean compoundStat() { 
@@ -315,7 +335,7 @@ public class Parser{
 		if (ident()){
 			System.out.println("ident condition for assignment Stmt passed! str = "+nextStr);
 			if (nextToken == Token.ASSIGN_EQUAL){
-				System.out.println("Here too!");
+				System.out.println("nt =>"+nextToken);
 				getNextToken();
 				if (expression()){
 					System.out.println("expressions arent always true, but today they are");
