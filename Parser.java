@@ -60,10 +60,10 @@ public class Parser{
 
 	public static void commenceParsing(){
 		if (program()){
-			System.out.println("Program Complete!");
+			System.out.println("Syntactically Correct Program Complete!");
 		}
 		else {
-			System.out.println("Error!\tnextStr = "+nextStr);
+			System.out.println("Syntax Error!\tnextStr = "+nextStr);
 			System.exit(0);
 		}
 	}
@@ -72,13 +72,18 @@ public class Parser{
 		nextStr = file.next();
 		nextToken = Token.getEnum(nextStr);
 		if (nextToken == null){
-			if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) nextToken = Token.USER_DEFINED_NAME;
-			if (nextStr.matches("[0-9]*")) nextToken = Token.NUMBER;
+			if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) {
+				nextToken = Token.USER_DEFINED_NAME;
+			}
+			if (nextStr.matches("[0-9]*")) {
+				nextToken = Token.NUMBER;
+			}
 			if (nextToken == null){
 				System.out.println("INVALID ==> "+nextStr);
 				System.exit(0);	
 			}
 		}
+		System.out.println("nt is now ==>"+nextToken );
 	}
 
 	public static boolean letter() {
@@ -131,8 +136,11 @@ public class Parser{
 	}
 
 	public static boolean ident() {
-		getNextToken();
-		return true;
+		if (nextToken == Token.USER_DEFINED_NAME){
+			getNextToken();
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean factor() {
@@ -237,6 +245,7 @@ public class Parser{
 	}
 
 	public static boolean selectionStat() {
+		System.out.println("selectionStat reached! mytoken -> "+nextToken);
 		if (nextToken == Token.IF){
 			getNextToken();
 			if (condition()) {
@@ -262,11 +271,13 @@ public class Parser{
 	}
 	
 	public static boolean compoundStat() { 
+		System.out.println("compoundStat reached! mytoken ->"+nextToken);
 		if (nextToken == Token.BEGIN) {
 			getNextToken();
 			if (statement()) {
 				while(nextToken == Token.SEMICOLON){
 					getNextToken();
+
 					if (statement()){
 						continue;
 					}
@@ -283,7 +294,7 @@ public class Parser{
 	}
 	
 	public static boolean procedureCallStat(){
-		System.out.println("myStr ->"+nextStr);
+		System.out.println("procedureCallStat reached! mytoken ->"+nextToken);
 		if (nextToken == Token.CALL){
 			System.out.println ("Commencing call!");
 			getNextToken();
@@ -300,8 +311,9 @@ public class Parser{
 	}
 
 	public static boolean assignmentStat(){
+		System.out.println("assignmentStat started!\tnextStr = "+nextStr+"\tnt = "+nextToken);
 		if (ident()){
-			System.out.println("Identifier?CoulditBe?\t"+nextStr);
+			System.out.println("ident condition for assignment Stmt passed! str = "+nextStr);
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.println("Here too!");
 				getNextToken();
@@ -380,7 +392,6 @@ public class Parser{
 				}				
 			}
 		}
-		System.out.println("now nt is "+nextToken+"\tand str is "+nextStr);
 		while (nextToken == Token.PROCEDURE){
 			getNextToken();
 			if (ident()) {
@@ -392,7 +403,7 @@ public class Parser{
 				}
 			}
 		}
-		System.out.println("nt is "+nextToken+"\t and str is "+nextStr);
+		System.out.println("nt-> "+nextToken+"\t str-> "+nextStr);
 		if (statement()) {
 			System.out.println("Statement went through!\tnextStr = "+nextStr);
 			return true;
