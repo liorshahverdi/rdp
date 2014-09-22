@@ -18,8 +18,7 @@ public class Parser{
 			System.exit(0);
 		}
 		getNextToken();
-		if (program()) System.out.println("Program complete!");
-		else System.out.println("Error!");
+		commenceParsing();
 	}
 
 	public enum Token{
@@ -242,6 +241,16 @@ public class Parser{
 		}*/
 	}
 
+	public static void commenceParsing(){
+		if (program()){
+			System.out.println("Program Complete!");
+		}
+		else {
+			System.out.println("Error!\tnextStr = "+nextStr);
+			System.exit(0);
+		}
+	}
+
 	public static void getNextToken(){
 		nextStr = file.next();
 		nextToken = Token.getEnum(nextStr);
@@ -249,7 +258,6 @@ public class Parser{
 		if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) nextToken = Token.USER_DEFINED_NAME;
 		if (nextStr.matches("[0-9]*")) nextToken = Token.NUMBER;
 		System.out.println("**\t"+nextToken);
-		
 		if (nextToken == null){
 			//didn't find proper enum
 			System.out.println("INVALID ==> "+nextStr);
@@ -257,7 +265,7 @@ public class Parser{
 		}
 	}
 
-	public boolean letter() {
+	public static boolean letter() {
 		switch (nextToken) {
 			case UP_A: case UP_B: case UP_C:
 			case UP_D: case UP_E: case UP_F:
@@ -287,7 +295,7 @@ public class Parser{
 		}
 	}
 
-	public boolean digit() {
+	public static boolean digit() {
 		switch (nextToken) {
 			case ZERO: case ONE: case TWO: case THREE: case FOUR:
 			case FIVE: case SIX: case SEVEN: case EIGHT: case NINE:
@@ -301,7 +309,7 @@ public class Parser{
 		}
 	}
 
-	public boolean number() {
+	public static boolean number() {
 		/*if (digit()) {
 			while (digit()) {
 				continue;
@@ -312,7 +320,7 @@ public class Parser{
 		return true;
 	}
 
-	public boolean ident() {
+	public static boolean ident() {
 		/*if (letter()) {
 			while ( letter() || digit() ) {
 				continue;
@@ -324,7 +332,7 @@ public class Parser{
 		return true;
 	}
 
-	public boolean factor() {
+	public static boolean factor() {
 		if (ident()) {
 			return true;
 		}
@@ -345,7 +353,7 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean term() {
+	public static boolean term() {
 		if (factor()) {
 			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
 				getNextToken();
@@ -359,7 +367,7 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean expression() {
+	public static boolean expression() {
 		System.out.println("Made it to expression!");
 		if (nextToken == Token.PLUS){
 			getNextToken();
@@ -375,12 +383,13 @@ public class Parser{
 				}
 				else return false;
 			}
+			System.out.println("True indeed");
 			return true;
 		}
 		else return false;
 	}
 
-	public boolean relOp(){
+	public static boolean relOp(){
 		switch (nextToken) {
 			case EQUAL: case NOT_EQUAL: case LESS_THAN:
 			case GREATER_THAN: case LESS_THAN_EQUAL_TO: case GREATER_THAN_EQUAL_TO: {
@@ -393,7 +402,7 @@ public class Parser{
 		}
 	}
 
-	public boolean condition() {
+	public static boolean condition() {
 		if (expression()){
 			if (relOp()) {
 				if (expression()){
@@ -406,7 +415,7 @@ public class Parser{
 		else return false;
 	}
 	
-	public boolean iterativeStat() {
+	public static boolean iterativeStat() {
 		if (nextToken == Token.WHILE){
 			getNextToken();
 			if (condition()) {
@@ -424,7 +433,7 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean selectionStat() {
+	public static boolean selectionStat() {
 		if (nextToken == Token.IF){
 			getNextToken();
 			if (condition()) {
@@ -449,7 +458,7 @@ public class Parser{
 		else return false;
 	}
 	
-	public boolean compoundStat() { 
+	public static boolean compoundStat() { 
 		if (nextToken == Token.BEGIN) {
 			getNextToken();
 			if (statement()) {
@@ -470,7 +479,7 @@ public class Parser{
 		else return false; 
 	}
 	
-	public boolean procedureCallStat(){
+	public static boolean procedureCallStat(){
 		if (nextToken == Token.CALL){
 			getNextToken();
 			if (ident()) {
@@ -481,13 +490,14 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean assignmentStat(){
+	public static boolean assignmentStat(){
 		if (ident()){
 			
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.println("Here too!");
 				getNextToken();
 				if (expression()){
+					System.out.println("expressions arent always true, but today they are");
 					return true;
 				}
 				else return false;
@@ -497,16 +507,21 @@ public class Parser{
 		else return false;
 	}
 
-	public boolean statement() {
-		if (assignmentStat()) { return true; }
-		else if (procedureCallStat()) { return true; }
+	public static boolean statement() {
+		if (assignmentStat()) { 
+			System.out.println("Assignment Statement indeed!");
+			return true; 
+		}
+		else if (procedureCallStat()) { 
+			System.out.println("Procedure Call Statement Indeed!");
+			return true; }
 		else if (compoundStat()) { return true; }
 		else if (selectionStat()) { return true; }
 		else if (iterativeStat()) { return true; }
 		else return false;
 	}
 
-	public boolean block(){
+	public static boolean block(){
 		if (nextToken == Token.CONSTANT) {
 			getNextToken();
 			if (ident()) {
@@ -555,7 +570,10 @@ public class Parser{
 				}
 			}
 		}
+		System.out.println("nextToken is now this here\t"+nextStr);
+
 		if (statement()) {
+			System.out.println("Statement went through!\tnextStr = "+nextStr);
 			return true;
 		}
 		else {
@@ -564,11 +582,13 @@ public class Parser{
 		}
 	}
 
-	public boolean program(){
+	public static boolean program(){
 		if (block()){
-			System.out.println("-->"+nextToken);
 			if (nextToken == Token.END_OF_INPUT) return true;
-			else return false;
+			else {
+				System.out.println("Missing end of input!token="+nextToken)
+				return false;
+			}
 		}
 		else return false;
 	}
