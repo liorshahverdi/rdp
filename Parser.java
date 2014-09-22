@@ -24,8 +24,9 @@ public class Parser{
 			getNextToken();
 			commenceParsing();
 			System.out.print("\n\n\nScan again? (y/n)");
-			String nextInput = inputScan.next();
-			if (nextInput.toUpperCase().equals("N")) continueScan = false; 
+			String nextChar = inputScan.next().substring(0,1).toUpperCase();
+			if (nextChar.equals("N")) continueScan = false; 
+			else if (nextChar.equals("Y")) continue;
 		}
 		
 	}

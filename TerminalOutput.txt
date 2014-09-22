@@ -1,6 +1,6 @@
 Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
 $ java Parser
-Enter a filename.. asgnstmt.txt
+Enter a filename..asgnStmt.txt
 nt is now ==>USER_DEFINED_NAME
 nt-> USER_DEFINED_NAME   str-> x123
 assignmentStat started! nextStr = x123  nt = USER_DEFINED_NAME
@@ -20,9 +20,9 @@ Assignment Statement indeed!
 Statement went through!         nextStr = $
 Syntactically Correct Program Complete!
 
-Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
-$ java Parser
-Enter a filename.. compoundStmt.txt
+
+Scan again? (y/n)y
+Enter a filename..compoundStmt.txt
 nt is now ==>BEGIN
 nt-> BEGIN       str-> begin
 assignmentStat started! nextStr = begin nt = BEGIN
@@ -63,9 +63,9 @@ Compound Statement Indeed!
 Statement went through!         nextStr = $
 Syntactically Correct Program Complete!
 
-Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
-$ java Parser
-Enter a filename.. iterativeStmt.txt
+
+Scan again? (y/n)y
+Enter a filename..iterativeStmt.txt
 nt is now ==>WHILE
 nt-> WHILE       str-> while
 assignmentStat started! nextStr = while nt = WHILE
@@ -108,9 +108,59 @@ Statement went through!         nextStr = $
 Syntactically Correct Program Complete!
 
 
-Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
-$ java Parser
-Enter a filename.. procedureCallStmt.txt
+Scan again? (y/n)y
+Enter a filename..selectionStmt.txt
+nt is now ==>IF
+nt-> IF  str-> if
+assignmentStat started! nextStr = if    nt = IF
+procedureCallStat reached! mytoken ->IF
+No procedure call today nextStr = if
+compoundStat reached! mytoken ->IF
+selectionStat reached OOO! mytoken -> IF
+nt is now ==>SIX
+Condition reached! nt = SIX
+Made it to expression! nt = SIX
+??      nt = SIX
+nt is now ==>LESS_THAN
+True indeed     nt = LESS_THAN
+Expression true! nt =LESS_THAN
+nt is now ==>SEVEN
+Made it to expression! nt = SEVEN
+??      nt = SEVEN
+nt is now ==>THEN
+True indeed     nt = THEN
+Expression true! nt =THEN
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = x123  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident condition for assignment Stmt passed! str = :=
+nt =>ASSIGN_EQUAL
+nt is now ==>SEVEN
+Made it to expression! nt = SEVEN
+??      nt = SEVEN
+nt is now ==>ELSE
+True indeed     nt = ELSE
+expressions arent always true, but today they are
+Assignment Statement indeed!
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = x123  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident condition for assignment Stmt passed! str = :=
+nt =>ASSIGN_EQUAL
+nt is now ==>NINE
+Made it to expression! nt = NINE
+??      nt = NINE
+nt is now ==>END_OF_INPUT
+True indeed     nt = END_OF_INPUT
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Selection Statement Indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+
+Scan again? (y/n)y
+Enter a filename..procedureCallStmt.txt
 nt is now ==>CALL
 nt-> CALL        str-> call
 assignmentStat started! nextStr = call  nt = CALL
@@ -122,16 +172,9 @@ Procedure Call Statement Indeed!
 Statement went through!         nextStr = $
 Syntactically Correct Program Complete!
 
+
+
+Scan again? (y/n)n
+
 Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
-$ java Parser
-Enter a filename.. procedureCallStmt.txt
-nt is now ==>CALL
-nt-> CALL        str-> call
-assignmentStat started! nextStr = call  nt = CALL
-procedureCallStat reached! mytoken ->CALL
-Commencing call!
-nt is now ==>USER_DEFINED_NAME
-nt is now ==>END_OF_INPUT
-Procedure Call Statement Indeed!
-Statement went through!         nextStr = $
-Syntactically Correct Program Complete!
+$
