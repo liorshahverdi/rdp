@@ -320,6 +320,7 @@ public class Parser{
 			return true;
 		}
 		else return false;*/
+		getNextToken();
 		return true;
 	}
 
@@ -359,6 +360,7 @@ public class Parser{
 	}
 
 	public boolean expression() {
+		System.out.println("Made it to expression!");
 		if (nextToken == Token.PLUS){
 			getNextToken();
 		}
@@ -481,7 +483,9 @@ public class Parser{
 
 	public boolean assignmentStat(){
 		if (ident()){
+			
 			if (nextToken == Token.ASSIGN_EQUAL){
+				System.out.println("Here too!");
 				getNextToken();
 				if (expression()){
 					return true;
@@ -562,6 +566,7 @@ public class Parser{
 
 	public boolean program(){
 		if (block()){
+			System.out.println("-->"+nextToken);
 			if (nextToken == Token.END_OF_INPUT) return true;
 			else return false;
 		}
