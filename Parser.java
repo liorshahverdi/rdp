@@ -126,24 +126,11 @@ public class Parser{
 	}
 
 	public static boolean number() {
-		/*if (digit()) {
-			while (digit()) {
-				continue;
-			}
-			return true;
-		}
-		else return false;*/
+		getNextToken();
 		return true;
 	}
 
 	public static boolean ident() {
-		/*if (letter()) {
-			while ( letter() || digit() ) {
-				continue;
-			}
-			return true;
-		}
-		else return false;*/
 		getNextToken();
 		return true;
 	}
@@ -426,10 +413,6 @@ public class Parser{
 		}
 		else return false;
 	}
-
-	/*public class ParseException extends Exception{
-		public static ParseException(String s) { super(s); }
-	}*/
 	
 	public static void main(String[] args){
 		System.out.print("Enter a filename.. ");
