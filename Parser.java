@@ -7,18 +7,27 @@ public class Parser{
 	private static String nextStr;
 	private static Token nextToken;
 
-	public Parser(String filename)
+	public Parser()
 	{
-		try
-		{
-			file = new Scanner(new File(filename));
-		} catch (FileNotFoundException e)
-		{
-			System.out.println("File "+filename+" is not found");
-			System.exit(0);
+		boolean continueScan = true;
+		while (continueScan){
+			System.out.print("Enter a filename..");
+			Scanner inputScan = new Scanner(System.in);
+			String filename = inputScan.next();
+			try
+			{file = new Scanner(new File(filename));} 
+			catch (FileNotFoundException e)
+			{
+				System.out.println("File "+filename+" is not found");
+				System.exit(0);
+			}
+			getNextToken();
+			commenceParsing();
+			System.out.print("\n\n\nScan again? (y/n)");
+			String nextInput = inputScan.next();
+			if (nextInput.toUpperCase().equals("N")) continueScan = false; 
 		}
-		getNextToken();
-		commenceParsing();
+		
 	}
 
 	public enum Token{
@@ -33,8 +42,8 @@ public class Parser{
  		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
  		LOW_T("t"), LOW_U("u"), LOW_V("v"), LOW_W("w"), LOW_X("x"), LOW_Y("y"), LOW_Z("z"),
  		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
- 		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), UP_W("W"),
- 		UP_X("X"), UP_Y("Y"), UP_Z("Z"),
+ 		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), 
+ 		UP_W("W"), UP_X("X"), UP_Y("Y"), UP_Z("Z"),
  		USER_DEFINED_NAME("---"),
  		END_OF_INPUT("$");
 		
@@ -446,9 +455,6 @@ public class Parser{
 	}
 	
 	public static void main(String[] args){
-		System.out.print("Enter a filename.. ");
-		Scanner input = new Scanner(System.in);
-		String inStr = input.next();
-		Parser p = new Parser(inStr);
+		Parser p = new Parser();
 	}
 }
