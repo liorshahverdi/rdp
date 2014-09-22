@@ -1,0 +1,137 @@
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename.. asgnstmt.txt
+nt is now ==>USER_DEFINED_NAME
+nt-> USER_DEFINED_NAME   str-> x123
+assignmentStat started! nextStr = x123  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident condition for assignment Stmt passed! str = :=
+nt =>ASSIGN_EQUAL
+nt is now ==>USER_DEFINED_NAME
+Made it to expression! nt = USER_DEFINED_NAME
+??      nt = USER_DEFINED_NAME
+nt is now ==>PLUS
+nt is now ==>ONE
+nt is now ==>END_OF_INPUT
+oh woww
+True indeed     nt = END_OF_INPUT
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename.. compoundStmt.txt
+nt is now ==>BEGIN
+nt-> BEGIN       str-> begin
+assignmentStat started! nextStr = begin nt = BEGIN
+procedureCallStat reached! mytoken ->BEGIN
+No procedure call today nextStr = begin
+compoundStat reached! mytoken ->BEGIN
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = x123  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident condition for assignment Stmt passed! str = :=
+nt =>ASSIGN_EQUAL
+nt is now ==>FIVE
+Made it to expression! nt = FIVE
+??      nt = FIVE
+nt is now ==>PLUS
+nt is now ==>SEVEN
+nt is now ==>SEMICOLON
+oh woww
+True indeed     nt = SEMICOLON
+expressions arent always true, but today they are
+Assignment Statement indeed!
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = k715  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident condition for assignment Stmt passed! str = :=
+nt =>ASSIGN_EQUAL
+nt is now ==>NUMBER
+Made it to expression! nt = NUMBER
+??      nt = NUMBER
+nt is now ==>MULTIPLY
+nt is now ==>THREE
+nt is now ==>END
+True indeed     nt = END
+expressions arent always true, but today they are
+Assignment Statement indeed!
+nt is now ==>END_OF_INPUT
+Compound Statement Indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename.. iterativeStmt.txt
+nt is now ==>WHILE
+nt-> WHILE       str-> while
+assignmentStat started! nextStr = while nt = WHILE
+procedureCallStat reached! mytoken ->WHILE
+No procedure call today nextStr = while
+compoundStat reached! mytoken ->WHILE
+selectionStat reached OOO! mytoken -> WHILE
+Landing? nt = WHILE
+And so they entered into the iterative.. nt = WHILE
+nt is now ==>NUMBER
+nt = NUMBER while down
+Condition reached! nt = NUMBER
+Made it to expression! nt = NUMBER
+??      nt = NUMBER
+nt is now ==>PLUS
+nt is now ==>THREE
+nt is now ==>GREATER_THAN_EQUAL_TO
+oh woww
+True indeed     nt = GREATER_THAN_EQUAL_TO
+Expression true! nt =GREATER_THAN_EQUAL_TO
+nt is now ==>FIVE
+Made it to expression! nt = FIVE
+??      nt = FIVE
+nt is now ==>MINUS
+nt is now ==>FOUR
+nt is now ==>DO
+oh woww
+True indeed     nt = DO
+Expression true! nt =DO
+Condition down nt = DO
+nt is now ==>CALL
+assignmentStat started! nextStr = call  nt = CALL
+procedureCallStat reached! mytoken ->CALL
+Commencing call!
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>END_OF_INPUT
+Procedure Call Statement Indeed!
+Iterative Statement Indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename.. procedureCallStmt.txt
+nt is now ==>CALL
+nt-> CALL        str-> call
+assignmentStat started! nextStr = call  nt = CALL
+procedureCallStat reached! mytoken ->CALL
+Commencing call!
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>END_OF_INPUT
+Procedure Call Statement Indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename.. procedureCallStmt.txt
+nt is now ==>CALL
+nt-> CALL        str-> call
+assignmentStat started! nextStr = call  nt = CALL
+procedureCallStat reached! mytoken ->CALL
+Commencing call!
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>END_OF_INPUT
+Procedure Call Statement Indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!

@@ -425,7 +425,7 @@ public class Parser{
 		}
 		System.out.println("nt-> "+nextToken+"\t str-> "+nextStr);
 		if (statement()) {
-			System.out.println("Statement went through!\tnextStr = "+nextStr);
+			System.out.println("Statement went through! \tnextStr = "+nextStr);
 			return true;
 		}
 		else {
