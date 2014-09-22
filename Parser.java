@@ -56,189 +56,6 @@ public class Parser{
 			}
 			return null;
 		}
-
-		/*public static Token getEnum(String str){
-			switch (str) {
-		        case "const":
-		            return CONSTANT;
-		        case "var":
-		        	return VARIABLE;
-		        case "procedure":
-		        	return PROCEDURE;
-		        case "call":
-		        	return CALL;
-		        case "begin":
-		        	return BEGIN;
-		        case "end":
-		        	return END;
-		        case "if":
-		        	return IF;
-		        case "then":
-		        	return THEN;
-		        case "else":
-		        	return ELSE;
-		        case "while":
-		        	return WHILE;
-		        case "do":
-		        	return DO;
-		        case "(":
-		        	return OPENPAREN;
-		        case ")":
-					return CLOSEPAREN;
-		        case ",":
-		        	return COMMA;
-		        case ";":
-		        	return SEMICOLON;
-		        case ":=":
-		        	return ASSIGN_EQUAL;
-		        case "=":
-		        	return EQUAL;
-		        case "!=":
-		        	return NOT_EQUAL;
-		        case "<":
-		        	return LESS_THAN;
-		        case ">":
-		        	return GREATER_THAN;
-		        case "<=":
-		        	return LESS_THAN_EQUAL_TO;
-		        case ">=":
-		        	return GREATER_THAN_EQUAL_TO;
-		        case "+":
-		        	return PLUS;
-		        case "-":
-		        	return MINUS;
-		        case "*":
-		        	return MULTIPLY;
-		        case "/":
-		        	return DIVIDE;
-		        case "0":
-		        	return ZERO;
-		        case "1":
-		        	return ONE;
-		        case "2":
-		        	return TWO;
-		        case "3":
-		        	return THREE;
-		        case "4":
-		        	return FOUR;
-		        case "5":
-		        	return FIVE;
-		        case "6":
-		        	return SIX;
-		        case "7":
-		        	return SEVEN;
-		        case "8":
-		        	return EIGHT;
-		        case "9":
-		        	return NINE;
-		        case "a":
-		        	return LOW_A;
-		        case "b":
-		        	return LOW_B;
-		        case "c":
-		        	return LOW_C;
-		        case "d":
-		        	return LOW_D;
-		        case "e":
-		        	return LOW_E;
-		        case "f":
-		        	return LOW_F;
-		        case "g":
-		        	return LOW_G;
-		        case "h":
-		        	return LOW_H;
-		        case "i":
-		        	return LOW_I;
-		        case "j":
-		        	return LOW_J;
-		        case "k":
-		        	return LOW_K;
-		        case "l":
-		        	return LOW_L;
-		        case "m":
-		        	return LOW_M;
-		        case "n":
-		        	return LOW_N;
-		        case "o":
-		        	return LOW_O;
-		        case "p":
-		        	return LOW_P;
-		        case "q":
-		        	return LOW_Q;
-		        case "r":
-		        	return LOW_R;
-		        case "s":
-		        	return LOW_S;
-		        case "t":
-		        	return LOW_T;
-		        case "u":
-		        	return LOW_U;
-		        case "v":
-		        	return LOW_V;
-		        case "w":
-		        	return LOW_W;
-		        case "x":
-		        	return LOW_X;
-		        case "y":
-		        	return LOW_Y;
-		        case "z":
-		        	return LOW_Z;
-		        case "A":
-		        	return UP_A;
-		        case "B":
-		        	return UP_B;
-		        case "C":
-		        	return UP_C;
-		        case "D":
-		        	return UP_D;
-		        case "E":
-		        	return UP_E;
-		        case "F":
-		        	return UP_F;
-		        case "G":
-		        	return UP_G;
-		        case "H":
-		        	return UP_H;
-		        case "I":
-		        	return UP_I;
-		        case "J":
-		        	return UP_J;
-		        case "K":
-		        	return UP_K;
-		        case "L":
-		        	return UP_L;
-		        case "M":
-		        	return UP_M;
-		        case "N":
-		        	return UP_N;
-		        case "O":
-		        	return UP_O;
-		        case "P":
-		        	return UP_P;
-		        case "Q":
-		        	return UP_Q;
-		        case "R":
-		        	return UP_R;
-		        case "S":
-		        	return UP_S;	
-		        case "T":
-		        	return UP_T;
-		        case "U":
-		        	return UP_U;
-		        case "V":
-		        	return UP_V;
-		        case "W":
-		        	return UP_W;
-		        case "X":
-		        	return UP_X;
-		       	case "Y":
-		       		return UP_Y;
-		       	case "Z":
-		       		return UP_Z;
-		        default:
-		            return null;
-		    }
-		}*/
 	}
 
 	public static void commenceParsing(){
@@ -254,14 +71,13 @@ public class Parser{
 	public static void getNextToken(){
 		nextStr = file.next();
 		nextToken = Token.getEnum(nextStr);
-		System.out.println("**\t"+nextToken);
-		if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) nextToken = Token.USER_DEFINED_NAME;
-		if (nextStr.matches("[0-9]*")) nextToken = Token.NUMBER;
-		System.out.println("**\t"+nextToken);
 		if (nextToken == null){
-			//didn't find proper enum
-			System.out.println("INVALID ==> "+nextStr);
-			System.exit(0);	
+			if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) nextToken = Token.USER_DEFINED_NAME;
+			if (nextStr.matches("[0-9]*")) nextToken = Token.NUMBER;
+			if (nextToken == null){
+				System.out.println("INVALID ==> "+nextStr);
+				System.exit(0);	
+			}
 		}
 	}
 
@@ -480,19 +296,25 @@ public class Parser{
 	}
 	
 	public static boolean procedureCallStat(){
+		System.out.println("myStr ->"+nextStr);
 		if (nextToken == Token.CALL){
+			System.out.println ("Commencing call!");
 			getNextToken();
 			if (ident()) {
 				return true;
 			}
 			else return false;
 		}
-		else return false;
+		else {
+
+			System.out.println("No procedure call today\tnextStr = "+nextStr);
+			return false;
+		}
 	}
 
 	public static boolean assignmentStat(){
 		if (ident()){
-			
+			System.out.println("Identifier?CoulditBe?\t"+nextStr);
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.println("Here too!");
 				getNextToken();
@@ -508,17 +330,29 @@ public class Parser{
 	}
 
 	public static boolean statement() {
+		//need to find a way for getNextToken to be in proper position
+		//for proper branching
 		if (assignmentStat()) { 
 			System.out.println("Assignment Statement indeed!");
-			return true; 
-		}
+			return true; }
 		else if (procedureCallStat()) { 
 			System.out.println("Procedure Call Statement Indeed!");
 			return true; }
-		else if (compoundStat()) { return true; }
-		else if (selectionStat()) { return true; }
-		else if (iterativeStat()) { return true; }
-		else return false;
+		else if (compoundStat()) { 
+			System.out.println("Compound Statement Indeed!");
+			return true; }
+		else if (selectionStat()) { 
+			System.out.println("Selection Statement Indeed!");
+			return true; }
+		else if (iterativeStat()) { 
+			System.out.println("Iterative Statement Indeed!");
+			return true; }
+
+		else 
+			{
+				System.out.println("No statement today :((\t-->"+nextStr);
+				return false;
+			}
 	}
 
 	public static boolean block(){
@@ -559,6 +393,7 @@ public class Parser{
 				}				
 			}
 		}
+		System.out.println("now nt is "+nextToken+"\tand str is "+nextStr);
 		while (nextToken == Token.PROCEDURE){
 			getNextToken();
 			if (ident()) {
@@ -570,8 +405,7 @@ public class Parser{
 				}
 			}
 		}
-		System.out.println("nextToken is now this here\t"+nextStr);
-
+		System.out.println("nt is "+nextToken+"\t and str is "+nextStr);
 		if (statement()) {
 			System.out.println("Statement went through!\tnextStr = "+nextStr);
 			return true;
@@ -586,7 +420,7 @@ public class Parser{
 		if (block()){
 			if (nextToken == Token.END_OF_INPUT) return true;
 			else {
-				System.out.println("Missing end of input!token="+nextToken)
+				System.out.println("Missing end of input!token="+nextToken);
 				return false;
 			}
 		}
