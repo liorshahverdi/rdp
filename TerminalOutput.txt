@@ -174,6 +174,148 @@ Syntactically Correct Program Complete!
 
 
 
+Scan again? (y/n)y
+Enter a filename..compblock1.txt
+nt is now ==>CONSTANT
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>EQUAL
+nt is now ==>NUMBER
+nt is now ==>SEMICOLON
+in number method! nt = SEMICOLON
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = n797  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident! nt = ASSIGN_EQUAL
+nt =>ASSIGN_EQUAL
+nt is now ==>NINE
+Made it to expression! nt = NINE
+nt is now ==>MINUS
+in number method! nt = MINUS
+nt is now ==>THREE
+nt is now ==>END_OF_INPUT
+in number method! nt = END_OF_INPUT
+Proper term! nextoken=>END_OF_INPUT
+True indeed     nt = END_OF_INPUT
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+
+
+Scan again? (y/n)y
+Enter a filename..compblock2.txt
+nt is now ==>CONSTANT
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>EQUAL
+nt is now ==>NUMBER
+nt is now ==>SEMICOLON
+in number method! nt = SEMICOLON
+nt is now ==>VARIABLE
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>COMMA
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>SEMICOLON
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = n797  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident! nt = ASSIGN_EQUAL
+nt =>ASSIGN_EQUAL
+nt is now ==>LOW_K
+Made it to expression! nt = LOW_K
+nt is now ==>MINUS
+in number method! nt = MINUS
+nt is now ==>THREE
+nt is now ==>END_OF_INPUT
+in number method! nt = END_OF_INPUT
+Proper term! nextoken=>END_OF_INPUT
+True indeed     nt = END_OF_INPUT
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+
+
+Scan again? (y/n)y
+Enter a filename..compblock3.txt
+nt is now ==>CONSTANT
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>EQUAL
+nt is now ==>NUMBER
+nt is now ==>SEMICOLON
+in number method! nt = SEMICOLON
+nt is now ==>VARIABLE
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>COMMA
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>SEMICOLON
+nt is now ==>PROCEDURE
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>SEMICOLON
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = k9    nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident! nt = ASSIGN_EQUAL
+nt =>ASSIGN_EQUAL
+nt is now ==>NUMBER
+Made it to expression! nt = NUMBER
+nt is now ==>MINUS
+in number method! nt = MINUS
+nt is now ==>SEVEN
+nt is now ==>PLUS
+in number method! nt = PLUS
+Proper term! nextoken=>PLUS
+nt is now ==>THREE
+nt is now ==>PROCEDURE
+in number method! nt = PROCEDURE
+Proper term! nextoken=>PROCEDURE
+True indeed     nt = PROCEDURE
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = procedure
+nt is now ==>USER_DEFINED_NAME
+nt is now ==>SEMICOLON
+nt is now ==>USER_DEFINED_NAME
+assignmentStat started! nextStr = l90j  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident! nt = ASSIGN_EQUAL
+nt =>ASSIGN_EQUAL
+nt is now ==>USER_DEFINED_NAME
+Made it to expression! nt = USER_DEFINED_NAME
+nt is now ==>MINUS
+nt is now ==>NUMBER
+nt is now ==>PLUS
+in number method! nt = PLUS
+Proper term! nextoken=>PLUS
+nt is now ==>NUMBER
+nt is now ==>USER_DEFINED_NAME
+in number method! nt = USER_DEFINED_NAME
+Proper term! nextoken=>USER_DEFINED_NAME
+True indeed     nt = USER_DEFINED_NAME
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = n797
+assignmentStat started! nextStr = n797  nt = USER_DEFINED_NAME
+nt is now ==>ASSIGN_EQUAL
+ident! nt = ASSIGN_EQUAL
+nt =>ASSIGN_EQUAL
+nt is now ==>NINE
+Made it to expression! nt = NINE
+nt is now ==>MINUS
+in number method! nt = MINUS
+nt is now ==>THREE
+nt is now ==>END_OF_INPUT
+in number method! nt = END_OF_INPUT
+Proper term! nextoken=>END_OF_INPUT
+True indeed     nt = END_OF_INPUT
+expressions arent always true, but today they are
+Assignment Statement indeed!
+Statement went through!         nextStr = $
+Syntactically Correct Program Complete!
+
+
+
 Scan again? (y/n)n
 
 Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)

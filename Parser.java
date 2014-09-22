@@ -142,6 +142,7 @@ public class Parser{
 
 	public static boolean number() {
 		getNextToken();
+		System.out.println("in number method! nt = "+nextToken);
 		return true;
 	}
 
@@ -196,13 +197,11 @@ public class Parser{
 		else if (nextToken == Token.MINUS){
 			getNextToken();
 		} 
-
-		System.out.println("??\tnt = "+nextToken);
 		if (term()) {
 			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
 				getNextToken();
 				if (term()){
-					System.out.println("oh woww");
+					System.out.println("Proper term! nextoken=>"+nextToken);
 					continue;
 				}
 				else return false;
@@ -267,7 +266,10 @@ public class Parser{
 			}
 			else return false;
 		}
-		else return false;
+		else {
+			System.out.println("no while token boohoo");
+			return false;
+		}
 	}
 
 	public static boolean selectionStat() {
@@ -295,7 +297,7 @@ public class Parser{
 		}
 		else 
 			{
-				System.out.println("Landing? nt = "+nextToken);
+				System.out.println("No if:( nt = "+nextToken);
 				return false;
 			}
 	}
@@ -343,7 +345,7 @@ public class Parser{
 	public static boolean assignmentStat(){
 		System.out.println("assignmentStat started!\tnextStr = "+nextStr+"\tnt = "+nextToken);
 		if (ident()){
-			System.out.println("ident condition for assignment Stmt passed! str = "+nextStr);
+			System.out.println("ident! nt = "+nextToken);
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.println("nt =>"+nextToken);
 				getNextToken();
@@ -359,8 +361,6 @@ public class Parser{
 	}
 
 	public static boolean statement() {
-		//need to find a way for getNextToken to be in proper position
-		//for proper branching
 		if (assignmentStat()) { 
 			System.out.println("Assignment Statement indeed!");
 			return true; }
@@ -396,6 +396,7 @@ public class Parser{
 							if (ident()){
 								if (nextToken == Token.EQUAL){
 									if (number()){
+										System.out.println("Valid Number!\tnt=>"+nextToken);
 										continue;
 									}
 								}	
@@ -433,7 +434,6 @@ public class Parser{
 				}
 			}
 		}
-		System.out.println("nt-> "+nextToken+"\t str-> "+nextStr);
 		if (statement()) {
 			System.out.println("Statement went through! \tnextStr = "+nextStr);
 			return true;
