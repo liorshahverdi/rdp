@@ -200,6 +200,7 @@ public class Parser{
 			getNextToken();
 		} 
 		if (term()) {
+			System.out.print("<term>");
 			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
 				System.out.print("<+|->");
 				getNextToken();
@@ -229,7 +230,7 @@ public class Parser{
 
 	public static boolean condition() {
 		if (expression()){
-			System.out.println("<condition>");
+			System.out.println("\n<condition />");
 			System.out.println("</expression>");
 			if (relOp()) {
 				System.out.println("<relOp>");
@@ -279,7 +280,7 @@ public class Parser{
 
 	public static boolean selectionStat() {
 		if (nextToken == Token.IF){
-			System.out.print("<selectionStmt />");
+			System.out.print("<selectionStmt />\n");
 			System.out.print("<if>");
 			getNextToken();
 			if (condition()) {
@@ -288,9 +289,9 @@ public class Parser{
 					System.out.print("<then>");
 					getNextToken();
 					if (statement()) {
-						System.out.print("</stmt>");
+						System.out.print("\n</stmt>");
 						if (nextToken == Token.ELSE) {
-							System.out.print("<else>");
+							System.out.print("\n<else>");
 							getNextToken();
 							if (statement()){
 								System.out.print("</stmt>");
@@ -353,7 +354,7 @@ public class Parser{
 		}
 		else {
 
-			System.out.println("No procedure call today\tnextStr = "+nextStr);
+			System.out.println("No procedure call today\tnextToken = "+nextToken);
 			return false;
 		}
 	}
