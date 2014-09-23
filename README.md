@@ -24,4 +24,3 @@ ident			-> letter { ( letter | digit ) }
 number			-> digit { digit }
 digit			-> 0 | 1 | ... | 9
 letter			-> A | ...| Z | a | ... | z
-
