@@ -23,7 +23,7 @@ public class Parser{
 			}
 			getNextToken();
 			commenceParsing();
-			System.out.print("\n\n\nScan again? (y/n)");
+			System.out.print("\nScan again? (y/n)");
 			String nextChar = inputScan.next().substring(0,1).toUpperCase();
 			if (nextChar.equals("N")) continueScan = false; 
 			else if (nextChar.equals("Y")) continue;
@@ -190,7 +190,7 @@ public class Parser{
 	}
 
 	public static boolean expression() {
-		System.out.println("<expression>");
+		System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
 			System.out.print("<+>");
 			getNextToken();
@@ -228,8 +228,8 @@ public class Parser{
 	}
 
 	public static boolean condition() {
-		System.out.println("<condition>");
 		if (expression()){
+			System.out.println("<condition>");
 			System.out.println("</expression>");
 			if (relOp()) {
 				System.out.println("<relOp>");
@@ -248,8 +248,8 @@ public class Parser{
 	}
 	
 	public static boolean iterativeStat() {
-		System.out.println("<iterativeStmt />");
 		if (nextToken == Token.WHILE){
+			System.out.println("<iterativeStmt />");
 			System.out.print("<while>");
 			getNextToken();
 			if (condition()) {
@@ -278,8 +278,8 @@ public class Parser{
 	}
 
 	public static boolean selectionStat() {
-		System.out.print("<selectionStmt />");
 		if (nextToken == Token.IF){
+			System.out.print("<selectionStmt />");
 			System.out.print("<if>");
 			getNextToken();
 			if (condition()) {
@@ -314,8 +314,8 @@ public class Parser{
 	}
 	
 	public static boolean compoundStat() { 
-		System.out.print("<compoundStmt />");
 		if (nextToken == Token.BEGIN) {
+			System.out.print("<compoundStmt />");
 			System.out.print("<begin>");
 			getNextToken();
 			if (statement()) {
@@ -341,8 +341,8 @@ public class Parser{
 	}
 	
 	public static boolean procedureCallStat(){
-		System.out.print("<procedureCallStmt />");
 		if (nextToken == Token.CALL){
+			System.out.print("<procedureCallStmt />");
 			System.out.print("<call>");
 			getNextToken();
 			if (ident()) {
@@ -359,9 +359,9 @@ public class Parser{
 	}
 
 	public static boolean assignmentStat(){
-		System.out.print("<asgnStmt />");
 		if (ident()){
-			System.out.print("<ident>");
+			System.out.print("<asgnStmt />");
+			System.out.print("\n<ident>");
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.print("<:=>");
 				getNextToken();
@@ -402,14 +402,14 @@ public class Parser{
 	}
 
 	public static boolean block(){
-		System.out.print("\n<block>");
+		System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
-			System.out.print("<constant>");
+			System.out.print("\n<constant>");
 			getNextToken();
 			if (ident()) {
 				System.out.print("<ident>");
 				if (nextToken == Token.EQUAL){
-					System.out.print("<equal");
+					System.out.print("<equal>");
 					getNextToken();
 					if (number()){
 						System.out.print("<number>");
@@ -453,7 +453,7 @@ public class Parser{
 			}
 		}
 		while (nextToken == Token.PROCEDURE){
-			System.out.print("<procedure>");
+			System.out.print("\n<procedure>");
 			getNextToken();
 			if (ident()) {
 				System.out.print("<ident>");
@@ -461,6 +461,7 @@ public class Parser{
 					System.out.print("<semicolon>");
 					getNextToken();
 					if (block()) {
+						System.out.print("\n</block>");
 						continue;
 					}
 				}
