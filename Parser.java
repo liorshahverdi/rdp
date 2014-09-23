@@ -96,36 +96,6 @@ public class Parser{
 		//System.out.println("nt is now ==>"+nextToken );
 	}
 
-	public static boolean letter() {
-		switch (nextToken) {
-			case UP_A: case UP_B: case UP_C:
-			case UP_D: case UP_E: case UP_F:
-			case UP_G: case UP_H: case UP_I:
-			case UP_J: case UP_K: case UP_L:
-			case UP_M: case UP_N: case UP_O:
-			case UP_P: case UP_Q: case UP_R:
-			case UP_S: case UP_T: case UP_U:
-			case UP_V: case UP_W: case UP_X:
-			case UP_Y: case UP_Z:
-			case LOW_A: case LOW_B: case LOW_C:
-			case LOW_D: case LOW_E: case LOW_F:
-			case LOW_G: case LOW_H: case LOW_I:
-			case LOW_J: case LOW_K: case LOW_L:
-			case LOW_M: case LOW_N: case LOW_O:
-			case LOW_P: case LOW_Q: case LOW_R:
-			case LOW_S: case LOW_T: case LOW_U:
-			case LOW_V: case LOW_W: case LOW_X:
-			case LOW_Y: case LOW_Z:
-			{
-				getNextToken();
-				return true;
-			}	
-			default: {
-				return false;
-			}
-		}
-	}
-
 	public static boolean digit() {
 		switch (nextToken) {
 			case ZERO: case ONE: case TWO: case THREE: case FOUR:
@@ -146,11 +116,34 @@ public class Parser{
 	}
 
 	public static boolean ident() {
-		if (nextToken == Token.USER_DEFINED_NAME){
-			getNextToken();
-			return true;
+		switch (nextToken) {
+			case UP_A: case UP_B: case UP_C:
+			case UP_D: case UP_E: case UP_F:
+			case UP_G: case UP_H: case UP_I:
+			case UP_J: case UP_K: case UP_L:
+			case UP_M: case UP_N: case UP_O:
+			case UP_P: case UP_Q: case UP_R:
+			case UP_S: case UP_T: case UP_U:
+			case UP_V: case UP_W: case UP_X:
+			case UP_Y: case UP_Z:
+			case LOW_A: case LOW_B: case LOW_C:
+			case LOW_D: case LOW_E: case LOW_F:
+			case LOW_G: case LOW_H: case LOW_I:
+			case LOW_J: case LOW_K: case LOW_L:
+			case LOW_M: case LOW_N: case LOW_O:
+			case LOW_P: case LOW_Q: case LOW_R:
+			case LOW_S: case LOW_T: case LOW_U:
+			case LOW_V: case LOW_W: case LOW_X:
+			case LOW_Y: case LOW_Z:
+			case USER_DEFINED_NAME:
+			{
+				getNextToken();
+				return true;
+			}	
+			default: {
+				return false;
+			}
 		}
-		return false;
 	}
 
 	public static boolean factor() {
@@ -256,7 +249,7 @@ public class Parser{
 			if (condition()) {
 				System.out.println("</condition>");
 				if (nextToken == Token.DO){
-					System.out.println("<do>");
+					System.out.print("<do>");
 					getNextToken();
 					if (statement()){
 						System.out.print("</stmt>");
@@ -354,7 +347,7 @@ public class Parser{
 		}
 		else {
 
-			System.out.println("No procedure call today\tnextToken = "+nextToken);
+			System.out.println("No procedure call today\tnt = "+nextToken);
 			return false;
 		}
 	}
