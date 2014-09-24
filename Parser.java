@@ -310,7 +310,7 @@ public class Parser{
 	public static boolean compoundStat() { 
 		if (nextToken == Token.BEGIN) {
 			System.out.print("<compoundStmt />");
-			System.out.print("<begin>");
+			System.out.print("\n<begin>");
 			getNextToken();
 			if (statement()) {
 				while(nextToken == Token.SEMICOLON){
@@ -318,12 +318,12 @@ public class Parser{
 					getNextToken();
 
 					if (statement()){
-						System.out.print("</stmt>");
+						System.out.print("\n</stmt>");
 						continue;
 					}
 				}
 				if (nextToken == Token.END){
-					System.out.print("<end>");
+					System.out.print("\n<end>");
 					getNextToken();
 					return true;
 				}
@@ -430,6 +430,7 @@ public class Parser{
 			}
 		}
 		if (nextToken == Token.VARIABLE){
+			System.out.print("<variable>");
 			getNextToken();
 			if (ident()){
 				System.out.print("<ident>");
@@ -437,6 +438,7 @@ public class Parser{
 					System.out.print("<comma>");
 					getNextToken();
 					if (ident()){
+						System.out.print("<ident>");
 						continue;
 					}
 				}
