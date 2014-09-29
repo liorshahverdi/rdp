@@ -41,13 +41,13 @@ public class Parser{
 	}
 
 	public enum Token{
-		//terminal symbols in grammar for our language
+		//terminal symbols
 		CONSTANT("const"), VARIABLE("var"), PROCEDURE("procedure"), CALL("call"), BEGIN("begin"), END("end"),
 		IF("if"), THEN("then"), ELSE("else"), WHILE("while"), DO("do"), OPENPAREN("("), CLOSEPAREN(")"),
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
-		NUMBER("0110")//placeholder value for any number in the given input code,
+		NUMBER("0110"),
  		ZERO("0"), ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"),
  		LOW_A("a"), LOW_B("b"), LOW_C("c"), LOW_D("d"), LOW_E("e"), LOW_F("f"), LOW_G("g"), LOW_H("h"), LOW_I("i"),
  		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
@@ -55,8 +55,8 @@ public class Parser{
  		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
  		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), 
  		UP_W("W"), UP_X("X"), UP_Y("Y"), UP_Z("Z"),
- 		USER_DEFINED_NAME("---")//placeholder value for user-defined-names,
- 		END_OF_INPUT("$")//not a terminal symbol but is still a token;
+ 		USER_DEFINED_NAME("---"),
+ 		END_OF_INPUT("$");
 		
 		private String str;
 
@@ -64,6 +64,7 @@ public class Parser{
 			this.str = s;
 		}
 
+		//String representation of enum type
 		public String getStr(){
     		return str;
 		}
@@ -118,6 +119,7 @@ public class Parser{
 		}
 	}
 
+	// <digit> := 0 | 1 | .. | 9
 	public static boolean digit() {
 		switch (nextToken) {
 			case ZERO: case ONE: case TWO: case THREE: case FOUR:
@@ -132,11 +134,13 @@ public class Parser{
 		}
 	}
 
+	// <number> := [0-9]*
 	public static boolean number() {
 		getNextToken();
 		return true;
 	}
 
+	// <ident> := [a-zA-Z]{1}[\\w]*
 	public static boolean ident() {
 		switch (nextToken) {
 			case UP_A: case UP_B: case UP_C:
@@ -168,6 +172,7 @@ public class Parser{
 		}
 	}
 
+	// <factor> := ident | number | '(' expression ')'
 	public static boolean factor() {
 		if (ident()) {
 			System.out.print("<ident>");
@@ -190,6 +195,7 @@ public class Parser{
 		else return false;
 	}
 
+	// <term> := factor { '*' | '/' } factor
 	public static boolean term() {
 		if (factor()) {
 			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
@@ -204,6 +210,7 @@ public class Parser{
 		else return false;
 	}
 
+	// <expression> := ['+' | '-'] term { '+' | '-' } term  
 	public static boolean expression() {
 		System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
@@ -230,6 +237,7 @@ public class Parser{
 		else return false;
 	}
 
+	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
 	public static boolean relOp(){
 		switch (nextToken) {
 			case EQUAL: case NOT_EQUAL: case LESS_THAN:
@@ -243,6 +251,7 @@ public class Parser{
 		}
 	}
 
+	// <condition> := expression relOp expression
 	public static boolean condition() {
 		if (expression()){
 			System.out.println("\n<condition />");
@@ -263,6 +272,7 @@ public class Parser{
 		else return false;
 	}
 	
+	// <iterativeStat> := 'while' condition 'do' statement
 	public static boolean iterativeStat() {
 		if (nextToken == Token.WHILE){
 			System.out.println("<iterativeStmt />");
@@ -293,6 +303,7 @@ public class Parser{
 		}
 	}
 
+	// <selectionStat> := 'if' condition 'then' statement 'else' statement
 	public static boolean selectionStat() {
 		if (nextToken == Token.IF){
 			System.out.print("<selectionStmt />\n");
@@ -329,6 +340,7 @@ public class Parser{
 			}
 	}
 	
+	// <compoundStat> := 'begin' statement { ; statement } 'end' 
 	public static boolean compoundStat() { 
 		if (nextToken == Token.BEGIN) {
 			System.out.print("<compoundStmt />");
@@ -356,6 +368,7 @@ public class Parser{
 		else return false; 
 	}
 	
+	// <procedureCallStat> := 'call' ident
 	public static boolean procedureCallStat(){
 		if (nextToken == Token.CALL){
 			System.out.print("<procedureCallStmt />");
@@ -374,6 +387,7 @@ public class Parser{
 		}
 	}
 
+	// <assignmentStat> := ident ':=' expression 
 	public static boolean assignmentStat(){
 		if (ident()){
 			System.out.print("<asgnStmt />");
@@ -392,6 +406,7 @@ public class Parser{
 		else return false;
 	}
 
+	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
 	public static boolean statement() {
 		System.out.println("\n<stmt />");
 		if (assignmentStat()) { 
@@ -416,7 +431,12 @@ public class Parser{
 				return false;
 			}
 	}
-
+	/*
+	*		   [ 'const' ident = number { , ident = number } ; ]
+	*	   	   [ 'var' ident { , ident } ; ]
+	*	   	   { 'procedure' ident ; block }
+	*	   	   statement
+	*/
 	public static boolean block(){
 		System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
@@ -495,12 +515,13 @@ public class Parser{
 		}
 	}
 
+	// <program> := block $
 	public static boolean program(){
 		if (block()){
 			System.out.print("\n</block>");
 			if (nextToken == Token.END_OF_INPUT) return true;
 			else {
-				System.out.println("Missing end of input!token="+nextToken);
+				System.out.println("Missing end of input! token="+nextToken);
 				return false;
 			}
 		}
