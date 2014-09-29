@@ -1,3 +1,12 @@
+/*
+*Developer: Lior Shahverdi
+* Description: This is a recursive descent parser which parses phrases in a generic grammar 
+* to determine if the given input is a syntactically valid collection of sentences in the grammar. 
+* This parser will parse the file provided as input token by token (delimited by spaces " "), map each
+* token to a terminal in the grammar and move on to the next token. If the token does not map to a 
+* terminal or gets recognized as a user-defined-name or number, the parser will terminate the parsing
+* process at the incorrect portion of the input.
+*/
 import java.util.*;
 import java.io.*;
 
@@ -78,6 +87,9 @@ public class Parser{
 		}
 	}
 
+	/*
+	*
+	*/
 	public static void getNextToken(){
 		nextStr = file.next();
 		nextToken = Token.getEnum(nextStr);
@@ -93,7 +105,6 @@ public class Parser{
 				System.exit(0);	
 			}
 		}
-		//System.out.println("nt is now ==>"+nextToken );
 	}
 
 	public static boolean digit() {
