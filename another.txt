@@ -1,2 +1,0 @@
-var ghe90 , klo9031 , mogly9081 , verl78 , j641 ;
-begin m8 := 9 - 3 - 3 - 3 + 1 ; m8 := m8 - 1 end $

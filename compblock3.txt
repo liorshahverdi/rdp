@@ -1,5 +1,0 @@
-const n797 = 56 ;
-var n797 , l90j ;
-procedure l90j ; k9 := 80 - 7 + 3
-procedure k9 ; l90j := k9 - 24 + 10
-n797 := 9 - 3 $
