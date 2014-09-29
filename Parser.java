@@ -30,9 +30,9 @@ public class Parser{
 				System.out.println("File "+filename+" is not found");
 				System.exit(0);
 			}
-			getNextToken();
-			commenceParsing();
-			System.out.print("\nScan again? (y/n)");
+			getNextToken(); //initialize nextToken to the first token in the input
+			commenceParsing(); //start the parsing process
+			System.out.print("\nScan again? (y/n)"); //option to scan multiple files
 			String nextChar = inputScan.next().substring(0,1).toUpperCase();
 			if (nextChar.equals("N")) continueScan = false; 
 			else if (nextChar.equals("Y")) continue;
@@ -41,12 +41,13 @@ public class Parser{
 	}
 
 	public enum Token{
+		//terminal symbols in grammar for our language
 		CONSTANT("const"), VARIABLE("var"), PROCEDURE("procedure"), CALL("call"), BEGIN("begin"), END("end"),
 		IF("if"), THEN("then"), ELSE("else"), WHILE("while"), DO("do"), OPENPAREN("("), CLOSEPAREN(")"),
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
-		NUMBER("0110"),
+		NUMBER("0110")//placeholder value for any number in the given input code,
  		ZERO("0"), ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"),
  		LOW_A("a"), LOW_B("b"), LOW_C("c"), LOW_D("d"), LOW_E("e"), LOW_F("f"), LOW_G("g"), LOW_H("h"), LOW_I("i"),
  		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
@@ -54,8 +55,8 @@ public class Parser{
  		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
  		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), 
  		UP_W("W"), UP_X("X"), UP_Y("Y"), UP_Z("Z"),
- 		USER_DEFINED_NAME("---"),
- 		END_OF_INPUT("$");
+ 		USER_DEFINED_NAME("---")//placeholder value for user-defined-names,
+ 		END_OF_INPUT("$")//not a terminal symbol but is still a token;
 		
 		private String str;
 
@@ -67,6 +68,10 @@ public class Parser{
     		return str;
 		}
 
+		/*
+		*	The getEnum method consumes a String value and maps the corresponding enum type to that string value. If no such 
+		*	string matches, the method returns null and therefore knows the input contains at least 1 invalid token.
+		*/
 		public static Token getEnum(String str) {
 			for (Token t: Token.values()){
 				if (str.equals(t.getStr())){
@@ -77,6 +82,9 @@ public class Parser{
 		}
 	}
 
+	/*
+	*	The commenceParsing() method is the method for the start symbol in our grammar (top-down). 
+	*/
 	public static void commenceParsing(){
 		if (program()){
 			System.out.println("\nProgram is Syntactically Correct!");
@@ -88,7 +96,10 @@ public class Parser{
 	}
 
 	/*
-	*
+	*	The getNextToken method sets the value of nextToken to the nextToken in the input.
+	*	If the string in the input is not mapped to a terminaly symbol in the getEnum method, or is 
+	*	selected by the regular expression for user defined names or number, then our string value 
+	*	is null and therefore is an invalid token. 
 	*/
 	public static void getNextToken(){
 		nextStr = file.next();
