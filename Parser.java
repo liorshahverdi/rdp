@@ -11,11 +11,9 @@ import java.util.*;
 import java.io.*;
 
 public class Parser{
-
 	private static Scanner file = null;
 	private static String nextStr;
 	private static Token nextToken;
-
 	private static String[] lexemeArray;
 	private static int lexArrlen;
 	private static int lexemeIndex;
@@ -55,16 +53,7 @@ public class Parser{
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
-		NUMBER("0110"),
- 		ZERO("0"), ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"),
- 		LOW_A("a"), LOW_B("b"), LOW_C("c"), LOW_D("d"), LOW_E("e"), LOW_F("f"), LOW_G("g"), LOW_H("h"), LOW_I("i"),
- 		LOW_J("j"), LOW_K("k"), LOW_L("l"), LOW_M("m"), LOW_N("n"), LOW_O("o"), LOW_P("p"), LOW_Q("q"), LOW_R("r"), LOW_S("s"),
- 		LOW_T("t"), LOW_U("u"), LOW_V("v"), LOW_W("w"), LOW_X("x"), LOW_Y("y"), LOW_Z("z"),
- 		UP_A("A"), UP_B("B"), UP_C("C"), UP_D("D"), UP_E("E"), UP_F("F"), UP_G("G"), UP_H("H"), UP_I("I"), UP_J("J"), UP_K("K"),
- 		UP_L("L"), UP_M("M"), UP_N("N"), UP_O("O"), UP_P("P"), UP_Q("Q"), UP_R("R"), UP_S("S"), UP_T("T"), UP_U("U"), UP_V("V"), 
- 		UP_W("W"), UP_X("X"), UP_Y("Y"), UP_Z("Z"),
- 		USER_DEFINED_NAME("---"),
- 		END_OF_INPUT("$");
+		NUMBER("0110"), USER_DEFINED_NAME("---"), END_OF_INPUT("$");
 		
 		private String str;
 
@@ -421,7 +410,6 @@ public class Parser{
 				return false;
 			}
 	}
-
 
 	/*
 	*		   [ 'const' ident = number { , ident = number } ; ]
