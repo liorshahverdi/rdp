@@ -46,7 +46,6 @@ public class Parser{
 				else if (nextChar.equals("Y")) continue;
 			}
 		}
-		
 	}
 
 	public enum Token{
@@ -416,10 +415,9 @@ public class Parser{
 		else if (iterativeStat()) { 
 			System.out.print("\n</iterativeStmt>");
 			return true; }
-
 		else 
 			{
-				System.out.println("No statement today :((\t-->"+nextStr);
+				System.out.print("No statement today :((");
 				return false;
 			}
 	}
