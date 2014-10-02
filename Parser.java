@@ -102,6 +102,7 @@ public class Parser{
 			if (lexemeIndex == (lexArrlen-1) ){
 				if (file.hasNextLine()){
 					lexemeArray = file.nextLine().split(" ");
+					lexArrlen = lexemeArray.length;
 					lexemeIndex = 0;
 				}
 			}
