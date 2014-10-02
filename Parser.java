@@ -40,7 +40,7 @@ public class Parser{
 				commenceParsing(); //start the parsing process
 				System.out.print("\nScan again? (y/n)"); //option to scan multiple files
 				String nextChar = inputScan.next().substring(0,1).toUpperCase();
-				if (nextChar.equals("N")) continueScan = false; 
+				if (nextChar.equals("N")) continueScan = false;
 				else if (nextChar.equals("Y")) continue;
 			}
 		}
@@ -53,7 +53,7 @@ public class Parser{
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
-		NUMBER("0110"), USER_DEFINED_NAME("---"), END_OF_INPUT("$");
+		NUMBER("0000"), USER_DEFINED_NAME("---"), END_OF_INPUT("$");
 		
 		private String str;
 
