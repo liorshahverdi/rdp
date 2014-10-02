@@ -1,9 +1,9 @@
 /*
 *Developer: Lior Shahverdi
-* Description: This is a recursive descent parser which parses phrases in a generic grammar 
-* to determine if the given input is a syntactically valid collection of sentences in the grammar. 
+* Description: This is a recursive descent parser which parses phrases in a grammar for a formal programming language 
+* to determine if the given input is a syntactically valid collection of sentences in the language. 
 * This parser will parse the file provided as input token by token (delimited by spaces " "), map each
-* token to a terminal in the grammar and move on to the next token. If the token does not map to a 
+* token to a terminal symbol in the grammar and move on to the next token. If the token does not map to a 
 * terminal or gets recognized as a user-defined-name or number, the parser will terminate the parsing
 * process at the incorrect portion of the input.
 */
@@ -11,10 +11,14 @@ import java.util.*;
 import java.io.*;
 
 public class Parser{
-		
+
 	private static Scanner file = null;
 	private static String nextStr;
 	private static Token nextToken;
+
+	private static String[] lexemeArray;
+	private static int lexArrlen;
+	private static int lexemeIndex;
 
 	public Parser()
 	{
@@ -30,12 +34,17 @@ public class Parser{
 				System.out.println("File "+filename+" is not found");
 				System.exit(0);
 			}
-			getNextToken(); //initialize nextToken to the first token in the input
-			commenceParsing(); //start the parsing process
-			System.out.print("\nScan again? (y/n)"); //option to scan multiple files
-			String nextChar = inputScan.next().substring(0,1).toUpperCase();
-			if (nextChar.equals("N")) continueScan = false; 
-			else if (nextChar.equals("Y")) continue;
+			lexemeIndex = 0;
+			if (file.hasNextLine()){
+				lexemeArray = file.nextLine().split(" ");
+				lexArrlen = lexemeArray.length;
+				getNextToken(); //initialize nextToken to the first token in the input
+				commenceParsing(); //start the parsing process
+				System.out.print("\nScan again? (y/n)"); //option to scan multiple files
+				String nextChar = inputScan.next().substring(0,1).toUpperCase();
+				if (nextChar.equals("N")) continueScan = false; 
+				else if (nextChar.equals("Y")) continue;
+			}
 		}
 		
 	}
@@ -75,9 +84,7 @@ public class Parser{
 		*/
 		public static Token getEnum(String str) {
 			for (Token t: Token.values()){
-				if (str.equals(t.getStr())){
-					return t;
-				}
+				if (str.equals(t.getStr())) return t;
 			}
 			return null;
 		}
@@ -103,19 +110,31 @@ public class Parser{
 	*	is null and therefore is an invalid token. 
 	*/
 	public static void getNextToken(){
-		nextStr = file.next();
-		nextToken = Token.getEnum(nextStr);
-		if (nextToken == null){
-			if (nextStr.matches("[a-zA-Z]{1}[\\w]*")) {
-				nextToken = Token.USER_DEFINED_NAME;
+		if (lexemeIndex <= (lexArrlen-1) ){
+			if (lexemeIndex == (lexArrlen-1) ){
+				if (file.hasNextLine()){
+					lexemeArray = file.nextLine().split(" ");
+					lexemeIndex = 0;
+				}
 			}
-			if (nextStr.matches("[0-9]*")) {
-				nextToken = Token.NUMBER;
-			}
+			nextToken = null;			
+			nextStr = lexemeArray[lexemeIndex];
+			lexemeIndex++;
+			nextToken = Token.getEnum(nextStr);
 			if (nextToken == null){
-				System.out.println("INVALID ==> "+nextStr);
-				System.exit(0);	
+				if (nextStr.matches("[a-zA-Z]{1}[\\w]*")){
+					nextToken = Token.USER_DEFINED_NAME;
+				}
+				if (nextStr.matches("[0-9]+")){
+					nextToken = Token.NUMBER;
+				}
+				if (nextToken == null) {
+					System.out.println("INVALID ==>"+nextStr);
+					System.exit(0);
+				}
 			}
+		}else {
+			System.out.println("Array out of bounds exception!");
 		}
 	}
 
@@ -431,6 +450,8 @@ public class Parser{
 				return false;
 			}
 	}
+
+
 	/*
 	*		   [ 'const' ident = number { , ident = number } ; ]
 	*	   	   [ 'var' ident { , ident } ; ]
@@ -456,6 +477,7 @@ public class Parser{
 								System.out.print("<ident>");
 								if (nextToken == Token.EQUAL){
 									System.out.print("<equal>");
+									getNextToken();
 									if (number()){
 										System.out.print("<number>");
 										continue;

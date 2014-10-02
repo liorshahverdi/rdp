@@ -1,0 +1,6 @@
+const mj12 = 13 , kl31 = 14 ;
+const mj12 = 10 , kl31 = 15 ;
+var kl31 , ml12 ;
+procedure kl31 ; kl31 := 3 - 3 - 1
+procedure kl12 ; while 3 < 9 do kl31 := 9 - 3 
+mj23 := 5 - 1 $

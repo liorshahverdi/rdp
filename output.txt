@@ -1,0 +1,241 @@
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat t1.txt
+const mj12 = 13 , kl13 = 14 ;
+procedure mj12 ; kl13 := 3 - 4
+Kl31 := 4 - 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..t1.txt
+
+<block />
+<constant><ident><equal><number><comma><ident><equal><number><semicolon>
+<procedure><ident><semicolon>
+<block />
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt>
+</stmt>
+</block>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt>
+</stmt>
+</block>
+Program is Syntactically Correct!
+
+Scan again? (y/n)n
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat t2.txt
+const mj12 = 13 , kl31 = 14 ;
+var kl31 , ml12 ;
+procedure kl31 ; kl31 := 3 - 3 - 1
+procedure kl12 ; while 3 < 9 do kl31 := 9 - 3
+mj23 := 5 - 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..t2.txt
+
+<block />
+<constant><ident><equal><number><comma><ident><equal><number><semicolon><variabl
+e><ident><comma><ident><semicolon>
+<procedure><ident><semicolon>
+<block />
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term><+|-><term></expression>
+</asgnStmt>
+</stmt>
+</block>
+<procedure><ident><semicolon>
+<block />
+<stmt />
+No procedure call today nt = WHILE
+No if:( nt = WHILE
+<iterativeStmt />
+<while><expression /><term>
+<condition />
+</expression>
+<relOp>
+<expression /><term></expression>
+</condition>
+<do>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt></stmt>
+</iterativeStmt>
+</stmt>
+</block>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt>
+</stmt>
+</block>
+Program is Syntactically Correct!
+
+Scan again? (y/n)n
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat t3.txt
+const mj12 = 13 , kl31 = 14 ;
+const mj12 = 10 , kl31 = 15 ;
+var kl31 , ml12 ;
+procedure kl31 ; kl31 := 3 - 3 - 1
+procedure kl12 ; while 3 < 9 do kl31 := 9 - 3
+mj23 := 5 - 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..t3.txt
+
+<block />
+<constant><ident><equal><number><comma><ident><equal><number><semicolon>
+<stmt />
+No procedure call today nt = CONSTANT
+No if:( nt = CONSTANT
+no while token boohoo
+No statement today :((  -->const
+Statement syntax error! const
+Syntax Error!   nextStr = const
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat asgnStmt.txt
+myId1 := 10 - 2 - 3 - 4 - 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..asgnStmt.txt
+
+<block />
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term><+|-><term><+|-><term><+|-><term></exp
+ression>
+</asgnStmt>
+</stmt>
+</block>
+Program is Syntactically Correct!
+
+Scan again? (y/n)n
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat selectionStmt.txt
+if 9 > 3 then kl13 := 5 - 2 else kl13 := 5 - 1 $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..selectionStmt.txt
+
+<block />
+<stmt />
+No procedure call today nt = IF
+<selectionStmt />
+<if><expression /><term>
+<condition />
+</expression>
+<relOp>
+<expression /><term></expression>
+</condition><then>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt>
+</stmt>
+<else>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt></stmt>
+</selectionStmt>
+</stmt>
+</block>
+Program is Syntactically Correct!
+
+Scan again? (y/n)n
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat compoundStmt.txt
+begin while 9 > 3 do klj2121 := 10 - 1 ; end $
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..compoundStmt.txt
+
+<block />
+<stmt />
+No procedure call today nt = BEGIN
+<compoundStmt />
+<begin>
+<stmt />
+No procedure call today nt = WHILE
+No if:( nt = WHILE
+<iterativeStmt />
+<while><expression /><term>
+<condition />
+</expression>
+<relOp>
+<expression /><term></expression>
+</condition>
+<do>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt></stmt>
+</iterativeStmt><semicolon>
+<stmt />
+No procedure call today nt = END
+No if:( nt = END
+no while token boohoo
+No statement today :((  -->end
+
+<end>
+</compoundStmt>
+</stmt>
+</block>
+Program is Syntactically Correct!
+
+Scan again? (y/n)n
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ cat compoundErrorStmt.txt
+begin while 9 > 3 do klj2121 := 10 - 1 ; end
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$ java Parser
+Enter a filename..compoundErrorStmt.txt
+
+<block />
+<stmt />
+No procedure call today nt = BEGIN
+<compoundStmt />
+<begin>
+<stmt />
+No procedure call today nt = WHILE
+No if:( nt = WHILE
+<iterativeStmt />
+<while><expression /><term>
+<condition />
+</expression>
+<relOp>
+<expression /><term></expression>
+</condition>
+<do>
+<stmt />
+<asgnStmt />
+<ident><:=><expression /><term><+|-><term></expression>
+</asgnStmt></stmt>
+</iterativeStmt><semicolon>
+<stmt />
+No procedure call today nt = END
+No if:( nt = END
+no while token boohoo
+No statement today :((  -->end
+
+<end>Exception in thread "main" java.util.NoSuchElementException
+        at java.util.Scanner.throwFor(Scanner.java:862)
+        at java.util.Scanner.next(Scanner.java:1371)
+        at Parser.getNextToken(Parser.java:106)
+        at Parser.compoundStat(Parser.java:361)
+        at Parser.statement(Parser.java:418)
+        at Parser.block(Parser.java:511)
+        at Parser.program(Parser.java:523)
+        at Parser.commenceParsing(Parser.java:90)
+        at Parser.<init>(Parser.java:34)
+        at Parser.main(Parser.java:535)
+
+Lior@LIORSHAHVERDI ~/Documents/fall2014/401/parser (master)
+$

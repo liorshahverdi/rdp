@@ -1,0 +1,1 @@
+if 9 > 3 then kl13 := 5 - 2 else kl13 := 5 - 1 $

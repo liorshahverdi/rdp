@@ -1,0 +1,3 @@
+const mj12 = 13 , kl13 = 14 ;
+procedure mj12 ; kl13 := 3 - 4
+Kl31 := 4 - 1 $
