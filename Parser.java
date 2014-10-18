@@ -132,46 +132,20 @@ public class Parser{
 	}
 
 	// <digit> := 0 | 1 | .. | 9
-	public static boolean digit() {
+	/*public static boolean digit() {
 		getNextToken();
 		return true;
-	}
-
-	// <number> := [0-9]+
-	private static boolean number() {
-		switch (nextToken) {
-			case NUMBER:
-			{
-				getNextToken();
-				return true;
-			}	
-			default: {
-				return false;
-			}
-		}
-	}
-
-	// <ident> := [a-zA-Z]{1}[\\w]*
-	private static boolean ident() {
-		switch (nextToken) {
-			case USER_DEFINED_NAME:
-			{
-				getNextToken();
-				return true;
-			}	
-			default: {
-				return false;
-			}
-		}
-	}
+	}*/
 
 	// <factor> := ident | number | '(' expression ')'
 	private static boolean factor() {
-		if (ident()) {
+		if (nextToken == Token.USER_DEFINED_NAME) {
+			getNextToken();
 			System.out.print("<ident>");
 			return true;
 		}
-		else if (number()) {
+		else if (nextToken == Token.NUMBER) {
+			getNextToken();
 			return true;
 		}
 		else if (nextToken == Token.OPENPAREN){
@@ -367,7 +341,8 @@ public class Parser{
 			System.out.print("<procedureCallStmt />");
 			System.out.print("<call>");
 			getNextToken();
-			if (ident()) {
+			if (nextToken == Token.USER_DEFINED_NAME) {
+				getNextToken();
 				System.out.print("<ident>");
 				return true;
 			}
@@ -381,7 +356,8 @@ public class Parser{
 
 	// <assignmentStat> := ident ':=' expression 
 	private static boolean assignmentStat(){
-		if (ident()){
+		if (nextToken == Token.USER_DEFINED_NAME){
+			getNextToken();
 			System.out.print("<asgnStmt />");
 			System.out.print("\n<ident>");
 			if (nextToken == Token.ASSIGN_EQUAL){
@@ -434,22 +410,26 @@ public class Parser{
 		if (nextToken == Token.CONSTANT) {
 			System.out.print("\n<constant>");
 			getNextToken();
-			if (ident()) {
+			if (nextToken == Token.USER_DEFINED_NAME) {
+				getNextToken();
 				System.out.print("<ident>");
 				if (nextToken == Token.EQUAL){
 					System.out.print("<equal>");
 					getNextToken();
-					if (number()){
+					if (nextToken == Token.NUMBER){
+						getNextToken();
 						System.out.print("<number>");
 						while (nextToken == Token.COMMA){
 							System.out.print("<comma>");
 							getNextToken();
-							if (ident()){
+							if (nextToken == Token.USER_DEFINED_NAME){
+								getNextToken();
 								System.out.print("<ident>");
 								if (nextToken == Token.EQUAL){
 									System.out.print("<equal>");
 									getNextToken();
-									if (number()){
+									if (nextToken == Token.NUMBER){
+										getNextToken();
 										System.out.print("<number>");
 										continue;
 									}
@@ -467,12 +447,14 @@ public class Parser{
 		if (nextToken == Token.VARIABLE){
 			System.out.print("<variable>");
 			getNextToken();
-			if (ident()){
+			if (nextToken == Token.USER_DEFINED_NAME){
+				getNextToken();
 				System.out.print("<ident>");
 				while (nextToken == Token.COMMA){
 					System.out.print("<comma>");
 					getNextToken();
-					if (ident()){
+					if (nextToken == Token.USER_DEFINED_NAME){
+						getNextToken();
 						System.out.print("<ident>");
 						continue;
 					}
@@ -486,7 +468,8 @@ public class Parser{
 		while (nextToken == Token.PROCEDURE){
 			System.out.print("\n<procedure>");
 			getNextToken();
-			if (ident()) {
+			if (nextToken == Token.USER_DEFINED_NAME) {
+				getNextToken();
 				System.out.print("<ident>");
 				if (nextToken == Token.SEMICOLON){
 					System.out.print("<semicolon>");
