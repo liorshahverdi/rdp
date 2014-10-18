@@ -131,12 +131,6 @@ public class Parser{
 		}
 	}
 
-	// <digit> := 0 | 1 | .. | 9
-	/*public static boolean digit() {
-		getNextToken();
-		return true;
-	}*/
-
 	// <factor> := ident | number | '(' expression ')'
 	private static boolean factor() {
 		if (nextToken == Token.USER_DEFINED_NAME) {
@@ -317,11 +311,11 @@ public class Parser{
 				while(nextToken == Token.SEMICOLON){
 					System.out.print("<semicolon>");
 					getNextToken();
-
 					if (statement()){
 						System.out.print("\n</stmt>");
 						continue;
 					}
+					else return false;
 				}
 				if (nextToken == Token.END){
 					System.out.print("\n<end>");
@@ -433,16 +427,23 @@ public class Parser{
 										System.out.print("<number>");
 										continue;
 									}
-								}	
+									else return false;
+								}
+								else return false;	
 							}
+							else return false;
 						}
 						if (nextToken == Token.SEMICOLON){
 							System.out.print("<semicolon>");
 							getNextToken();
 						}
+						else return false;
 					}
+					else return false;
 				}
+				else return false;
 			}
+			else return false;
 		}
 		if (nextToken == Token.VARIABLE){
 			System.out.print("<variable>");
@@ -462,8 +463,10 @@ public class Parser{
 				if (nextToken == Token.SEMICOLON){
 					System.out.print("<semicolon>");
 					getNextToken();
-				}				
+				}		
+				else return false;		
 			}
+			else return false;
 		}
 		while (nextToken == Token.PROCEDURE){
 			System.out.print("\n<procedure>");
@@ -478,8 +481,11 @@ public class Parser{
 						System.out.print("\n</block>");
 						continue;
 					}
+					else return false;
 				}
+				else return false;
 			}
+			else return false;
 		}
 		if (statement()) {
 			System.out.print("\n</stmt>");
