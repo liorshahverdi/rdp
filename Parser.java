@@ -18,6 +18,9 @@ public class Parser{
 	private static int lexArrLen;
 	private static int lexemeIndex;
 
+	private static ArrayStack sas; 
+	private static HashMap listOfVars;
+
 	public Parser()
 	{
 		boolean continueScan = true;
@@ -42,7 +45,7 @@ public class Parser{
 		}
 	}
 
-	public enum Token{
+	private enum Token{
 		//terminal symbols
 		CONSTANT("const"), VARIABLE("var"), PROCEDURE("procedure"), CALL("call"), BEGIN("begin"), END("end"),
 		IF("if"), THEN("then"), ELSE("else"), WHILE("while"), DO("do"), OPENPAREN("("), CLOSEPAREN(")"),
@@ -58,7 +61,7 @@ public class Parser{
 		}
 
 		//String representation of enum type
-		public String getStr(){
+		private String getStr(){
     		return str;
 		}
 
@@ -66,7 +69,7 @@ public class Parser{
 		*	The getEnum method consumes a String value and maps the corresponding enum type to that string value. If no such 
 		*	string matches, the method returns null and therefore knows the input contains at least 1 invalid token.
 		*/
-		public static Token getEnum(String str) {
+		private static Token getEnum(String str) {
 			for (Token t: Token.values()){
 				if (str.equals(t.getStr())) return t;
 			}
@@ -78,6 +81,9 @@ public class Parser{
 		lexemeIndex = 0;
 		lexemeArray = file.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
+
+		sas = new ArrayStack(100);
+		listOfVars = new HashMap();
 	}
 
 	/*
