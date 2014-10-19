@@ -87,7 +87,7 @@ public class Parser{
 	}
 
 	/*
-	*	The commenceParsing() method is the method for the start symbol in our grammar (top-down). 
+	*	The commenceParsing method calls the start symbol in our grammar (top-down). 
 	*/
 	private static void commenceParsing(){
 		if (program()){
@@ -135,6 +135,13 @@ public class Parser{
 			System.out.println("Array out of bounds exception!\t lexemeIndex = "+lexemeIndex);
 			System.exit(0);
 		}
+	}
+
+	private static void pushIdentValue() {
+		try{
+			int varVal = (int) listOfVars.get(nextStr);
+			System.out.println("vv = "+varVal);
+		} catch (NullPointerException e){System.out.println("No value assigned to this identifier!\n"+e);}		
 	}
 
 	// <factor> := ident | number | '(' expression ')'
@@ -342,6 +349,7 @@ public class Parser{
 			System.out.print("<call>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
+				pushIdentValue();
 				getNextToken();
 				System.out.print("<ident>");
 				return true;
