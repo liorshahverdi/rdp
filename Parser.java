@@ -393,12 +393,10 @@ public class Parser{
 			}
 	}
 
-	/*
-	*		   [ 'const' ident = number { , ident = number } ; ]
+	/*		   [ 'const' ident = number { , ident = number } ; ]
 	*	   	   [ 'var' ident { , ident } ; ]
 	*	   	   { 'procedure' ident ; block }
-	*	   	   statement
-	*/
+	*	   	   statement                                             */
 	private static boolean block(){
 		System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
