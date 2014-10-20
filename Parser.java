@@ -139,19 +139,28 @@ public class Parser{
 
 	private static void pushIdentValue() {
 		try{
-			int varVal = (int) listOfVars.get(nextStr);
-			System.out.println("vv = "+varVal);
-		} catch (NullPointerException e){System.out.println("No value assigned to this identifier!\n"+e);}		
+			int identVal = (int) listOfVars.get(nextStr);
+			//System.out.println("idval = "+identVal);
+			sas.push(identVal);
+		} catch (NullPointerException e){System.out.println(e);}		
+	}
+
+	private static void pushNumberTokenValue() {
+		int tokVal = Integer.parseInt(nextStr);
+		sas.push(tokVal);
 	}
 
 	// <factor> := ident | number | '(' expression ')'
 	private static boolean factor() {
 		if (nextToken == Token.USER_DEFINED_NAME) {
-			getNextToken();
 			System.out.print("<ident>");
+			pushIdentValue();
+			getNextToken();
 			return true;
 		}
 		else if (nextToken == Token.NUMBER) {
+			System.out.print("<ident>");
+			pushNumberTokenValue();
 			getNextToken();
 			return true;
 		}
@@ -169,15 +178,32 @@ public class Parser{
 		else return false;
 	}
 
-	// <term> := factor { '*' | '/' } factor
+	// <term> := factor {(*|/) factor } 
 	private static boolean term() {
 		if (factor()) {
 			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
-				getNextToken();
-				if (factor()) {
-					continue;
+				if (nextToken == Token.MULTIPLY){
+					getNextToken();
+					if (factor()) {
+
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1*op2);
+						continue;
+					}
+					else return false;
 				}
-				else return false;
+				else if (nextToken == Token.DIVIDE){
+					getNextToken();
+					if (factor()) {
+
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1/op2);
+						continue;
+					}
+					else return false;
+				}
 			}
 			return true;
 		}
@@ -185,7 +211,7 @@ public class Parser{
 	}
 
 	// <expression> := ['+' | '-'] term { '+' | '-' } term  
-	private static boolean expression() {
+	/*private static boolean expression() {
 		System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
 			System.out.print("<+>");
@@ -209,7 +235,53 @@ public class Parser{
 			return true;
 		}
 		else return false;
-	}
+	}*/
+
+	// <expression> := ['+' | '-'] term {('+'|'-') term} 
+	private static boolean expression() {
+		System.out.print("<expression />");
+		if (nextToken == Token.PLUS){
+			System.out.print("<+>");
+			getNextToken();
+		}
+		else if (nextToken == Token.MINUS){
+			System.out.print("<->");
+			getNextToken();
+		} 
+		if (term()) {
+			System.out.print("<term>");
+			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
+				System.out.print("<+|->");
+				if (nextToken==Token.PLUS){
+					getNextToken();
+					if (term()){
+						System.out.print("<term>");
+
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1+op2);
+						continue;
+					}
+					else return false;
+				}
+				else if (nextToken == Token.MINUS){
+					getNextToken();
+					if (term()){
+						System.out.print("<term>");
+
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1-op2);
+						continue;
+					}
+					else return false;
+				}
+			}
+			return true;
+		}
+		else return false;
+
+	}	
 
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
 	private static boolean relOp(){
@@ -349,9 +421,9 @@ public class Parser{
 			System.out.print("<call>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
+				System.out.print("<ident>");
 				pushIdentValue();
 				getNextToken();
-				System.out.print("<ident>");
 				return true;
 			}
 			else return false;
@@ -365,9 +437,10 @@ public class Parser{
 	// <assignmentStat> := ident ':=' expression 
 	private static boolean assignmentStat(){
 		if (nextToken == Token.USER_DEFINED_NAME){
-			getNextToken();
 			System.out.print("<asgnStmt />");
 			System.out.print("\n<ident>");
+			pushIdentValue();
+			getNextToken();
 			if (nextToken == Token.ASSIGN_EQUAL){
 				System.out.print("<:=>");
 				getNextToken();
@@ -417,8 +490,9 @@ public class Parser{
 			System.out.print("\n<constant>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
-				getNextToken();
 				System.out.print("<ident>");
+				pushIdentValue();
+				getNextToken();
 				if (nextToken == Token.EQUAL){
 					System.out.print("<equal>");
 					getNextToken();
@@ -429,8 +503,9 @@ public class Parser{
 							System.out.print("<comma>");
 							getNextToken();
 							if (nextToken == Token.USER_DEFINED_NAME){
-								getNextToken();
 								System.out.print("<ident>");
+								pushIdentValue();
+								getNextToken();
 								if (nextToken == Token.EQUAL){
 									System.out.print("<equal>");
 									getNextToken();
@@ -461,14 +536,16 @@ public class Parser{
 			System.out.print("<variable>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME){
-				getNextToken();
 				System.out.print("<ident>");
+				pushIdentValue();
+				getNextToken();
 				while (nextToken == Token.COMMA){
 					System.out.print("<comma>");
 					getNextToken();
 					if (nextToken == Token.USER_DEFINED_NAME){
-						getNextToken();
 						System.out.print("<ident>");
+						pushIdentValue();
+						getNextToken();
 						continue;
 					}
 				}
@@ -484,8 +561,9 @@ public class Parser{
 			System.out.print("\n<procedure>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
-				getNextToken();
 				System.out.print("<ident>");
+				pushIdentValue();
+				getNextToken();
 				if (nextToken == Token.SEMICOLON){
 					System.out.print("<semicolon>");
 					getNextToken();
