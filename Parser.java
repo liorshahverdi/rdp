@@ -486,11 +486,16 @@ public class Parser{
 				getNextToken();
 				if (nextToken == Token.USER_DEFINED_NAME){
 					//System.out.print("<ident>");
+					if (listOfVars.get(nextStr) == null){
+						listOfVars.put(nextStr, 0);
+					}
+					System.out.println("Key-> "+nextStr+"\t\tValue-> "+listOfVars.get(nextStr).toString());
 					getNextToken();
 				}
 			} while (nextToken == Token.COMMA);	
 			if (nextToken == Token.SEMICOLON){
 				//System.out.print("<semicolon>");
+				System.out.println("End of variables\n");
 				getNextToken();
 			}else return false;		
 		}
