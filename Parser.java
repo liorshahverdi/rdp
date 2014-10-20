@@ -238,13 +238,47 @@ public class Parser{
 			}
 			if (factor()){
 				workaround = true;
-			}
+			}else return false;
 		} while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE);
 		return true;
 	}
 
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
 	private static boolean expression() {
+		boolean isNegative = false;
+		boolean skipFirstIteration = false;
+
+		boolean subtract = false;
+
+		if (nextToken == Token.PLUS){
+			getNextToken();
+		}
+		else if (nextToken == Token.MINUS){
+			getNextToken();
+			isNegative = true;
+		} 
+		do {
+			if (skipFirstIteration){
+				getNextToken();
+			}
+
+			if (term()){
+				if (isNegative){
+					int topOperand = (int) sas.pop();
+					sas.push(-1 * topOperand);
+					isNegative = false;
+				}
+				skipFirstIteration = true;
+
+
+				continue;
+			}else return false;
+		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
+		return true;
+	}
+
+	// <expression> := ['+' | '-'] term {('+'|'-') term} 
+	/*private static boolean expression() {
 		//System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
 			//System.out.print("<+>");
@@ -288,7 +322,7 @@ public class Parser{
 		}
 		else return false;
 
-	}	
+	}*/	
 
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
 	private static boolean relOp(){
