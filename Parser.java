@@ -159,7 +159,7 @@ public class Parser{
 			return true;
 		}
 		else if (nextToken == Token.NUMBER) {
-			System.out.print("<ident>");
+			//System.out.print("<ident>");
 			pushNumberTokenValue();
 			getNextToken();
 			return true;
@@ -210,52 +210,25 @@ public class Parser{
 		else return false;
 	}
 
-	// <expression> := ['+' | '-'] term { '+' | '-' } term  
-	/*private static boolean expression() {
-		System.out.print("<expression />");
-		if (nextToken == Token.PLUS){
-			System.out.print("<+>");
-			getNextToken();
-		}
-		else if (nextToken == Token.MINUS){
-			System.out.print("<->");
-			getNextToken();
-		} 
-		if (term()) {
-			System.out.print("<term>");
-			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
-				System.out.print("<+|->");
-				getNextToken();
-				if (term()){
-					System.out.print("<term>");
-					continue;
-				}
-				else return false;
-			}
-			return true;
-		}
-		else return false;
-	}*/
-
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
 	private static boolean expression() {
 		System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
-			System.out.print("<+>");
+			//System.out.print("<+>");
 			getNextToken();
 		}
 		else if (nextToken == Token.MINUS){
-			System.out.print("<->");
+			//System.out.print("<->");
 			getNextToken();
 		} 
 		if (term()) {
-			System.out.print("<term>");
+			//System.out.print("<term>");
 			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
-				System.out.print("<+|->");
+				//System.out.print("<+|->");
 				if (nextToken==Token.PLUS){
 					getNextToken();
 					if (term()){
-						System.out.print("<term>");
+						//System.out.print("<term>");
 
 						int op1 = (int) sas.pop();
 						int op2 = (int) sas.pop();
@@ -267,16 +240,17 @@ public class Parser{
 				else if (nextToken == Token.MINUS){
 					getNextToken();
 					if (term()){
-						System.out.print("<term>");
+						//System.out.print("<term>");
 
 						int op1 = (int) sas.pop();
 						int op2 = (int) sas.pop();
-						sas.push(op1-op2);
+						sas.push(op2-op1);
 						continue;
 					}
 					else return false;
 				}
 			}
+			System.out.println("Reached end of expression! TOP OF STACK = "+sas.top().toString());
 			return true;
 		}
 		else return false;
