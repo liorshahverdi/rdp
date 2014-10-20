@@ -9,7 +9,7 @@ block 				-> [ 'const' ident = number { , ident = number } ; ]
 		   	  	   	   [ 'var' ident { , ident } ; ]
 		   	           { 'procedure' ident ; block }
 		   	            statement 
-statement			-> assignmentStat | procedureCallStat | compoundStat | selectionStat | iterative Stat
+statement			-> assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat
 assignmentStat		-> ident := expression
 procedureCallStat	-> 'call' ident
 compoundStat		-> 'begin' statement { ; statement } 'end'

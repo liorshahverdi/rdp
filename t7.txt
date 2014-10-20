@@ -1,0 +1,4 @@
+const abc = 123 , def = 6 , fde = 5813 ;
+var gi , def , no ;
+procedure gi ; no := 5
+s5 := - 9 - 5 + 9 * 8 - 4 / def $
