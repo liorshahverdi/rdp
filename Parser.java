@@ -179,7 +179,7 @@ public class Parser{
 	}
 
 	// <term> := factor {(*|/) factor } 
-	private static boolean term() {
+	/*private static boolean term() {
 		if (factor()) {
 			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
 				if (nextToken == Token.MULTIPLY){
@@ -208,6 +208,39 @@ public class Parser{
 			return true;
 		}
 		else return false;
+	}*/
+
+	// <term> := factor {(*|/) factor } 
+	private static boolean term() {
+		boolean workaround = false;
+		do {
+			if (workaround){
+				if (nextToken == Token.MULTIPLY){
+					getNextToken();
+					if (factor()) {
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1*op2);
+						continue;
+					}
+					else return false;
+				}
+				else if (nextToken == Token.DIVIDE){
+					getNextToken();
+					if (factor()) {
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1/op2);
+						continue;
+					}
+					else return false;
+				}
+			}
+			if (factor()){
+				workaround = true;
+			}
+		} while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE);
+		return true;
 	}
 
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
