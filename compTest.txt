@@ -1,0 +1,2 @@
+const x1 = 314 , y1 = 413 ;
+begin x1 := 3 ; y1 := 4 end $

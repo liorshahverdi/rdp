@@ -215,8 +215,6 @@ public class Parser{
 	private static boolean expression() {
 		boolean firstTermIsNegative = false;
 		boolean skipsFirstIteration = false;
-		boolean subtract = false;
-
 		if (nextToken == Token.PLUS){
 			getNextToken();
 		}
@@ -245,7 +243,6 @@ public class Parser{
 					}
 				}
 			}
-
 			if (term() && !skipsFirstIteration) {
 				if (firstTermIsNegative){
 					int topOperand = (int) sas.pop();
@@ -258,53 +255,6 @@ public class Parser{
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
 		return true;
 	}
-
-	// <expression> := ['+' | '-'] term {('+'|'-') term} 
-	/*private static boolean expression() {
-		//System.out.print("<expression />");
-		if (nextToken == Token.PLUS){
-			//System.out.print("<+>");
-			getNextToken();
-		}
-		else if (nextToken == Token.MINUS){
-			//System.out.print("<->");
-			getNextToken();
-		} 
-		if (term()) {
-			//System.out.print("<term>");
-			while (nextToken == Token.PLUS || nextToken == Token.MINUS){
-				//System.out.print("<+|->");
-				if (nextToken==Token.PLUS){
-					getNextToken();
-					if (term()){
-						//System.out.print("<term>");
-
-						int op1 = (int) sas.pop();
-						int op2 = (int) sas.pop();
-						sas.push(op1+op2);
-						continue;
-					}
-					else return false;
-				}
-				else if (nextToken == Token.MINUS){
-					getNextToken();
-					if (term()){
-						//System.out.print("<term>");
-
-						int op1 = (int) sas.pop();
-						int op2 = (int) sas.pop();
-						sas.push(op2-op1);
-						continue;
-					}
-					else return false;
-				}
-			}
-			System.out.println("\nTOP OF STACK = "+sas.top().toString());
-			return true;
-		}
-		else return false;
-
-	}*/	
 
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
 	private static boolean relOp(){
@@ -402,39 +352,26 @@ public class Parser{
 			}
 			else return false;
 		}
-		else 
-			{
-				System.out.println("No if:( nt = "+nextToken);
-				return false;
-			}
+		else {
+			System.out.println("No if:( nt = "+nextToken);
+			return false;
+		}
 	}
 	
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
-	private static boolean compoundStat() { 
-		if (nextToken == Token.BEGIN) {
-			//System.out.print("<compoundStmt />");
-			//System.out.print("\n<begin>");
-			getNextToken();
-			if (statement()) {
-				while(nextToken == Token.SEMICOLON){
-					//System.out.print("<semicolon>");
-					getNextToken();
-					if (statement()){
-						//System.out.print("\n</stmt>");
-						continue;
-					}
-					else return false;
-				}
-				if (nextToken == Token.END){
-					//System.out.print("\n<end>");
-					getNextToken();
-					return true;
-				}
-				else return false;
-			}
-			else return false;
-		}
-		else return false; 
+	private static boolean compoundStat() {
+		if (nextToken == Token.BEGIN){
+			do{
+				getNextToken();
+				if (statement()){
+					continue;
+				}else return false;
+			} while (nextToken == Token.SEMICOLON);
+			if (nextToken == Token.END){
+				getNextToken();
+				return true;
+			}else return false;
+		}else return false;
 	}
 	
 	// <procedureCallStat> := 'call' ident
@@ -452,7 +389,7 @@ public class Parser{
 			else return false;
 		}
 		else {
-			System.out.println("No procedure call today\tnt = "+nextToken);
+			//System.out.println("No procedure call today\tnt = "+nextToken);
 			return false;
 		}
 	}
