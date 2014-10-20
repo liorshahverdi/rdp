@@ -179,38 +179,6 @@ public class Parser{
 	}
 
 	// <term> := factor {(*|/) factor } 
-	/*private static boolean term() {
-		if (factor()) {
-			while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE) {
-				if (nextToken == Token.MULTIPLY){
-					getNextToken();
-					if (factor()) {
-
-						int op1 = (int) sas.pop();
-						int op2 = (int) sas.pop();
-						sas.push(op1*op2);
-						continue;
-					}
-					else return false;
-				}
-				else if (nextToken == Token.DIVIDE){
-					getNextToken();
-					if (factor()) {
-
-						int op1 = (int) sas.pop();
-						int op2 = (int) sas.pop();
-						sas.push(op1/op2);
-						continue;
-					}
-					else return false;
-				}
-			}
-			return true;
-		}
-		else return false;
-	}*/
-
-	// <term> := factor {(*|/) factor } 
 	private static boolean term() {
 		boolean workaround = false;
 		do {
@@ -230,7 +198,7 @@ public class Parser{
 					if (factor()) {
 						int op1 = (int) sas.pop();
 						int op2 = (int) sas.pop();
-						sas.push(op1/op2);
+						sas.push(op2/op1);
 						continue;
 					}
 					else return false;
@@ -245,9 +213,8 @@ public class Parser{
 
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
 	private static boolean expression() {
-		boolean isNegative = false;
-		boolean skipFirstIteration = false;
-
+		boolean firstTermIsNegative = false;
+		boolean skipsFirstIteration = false;
 		boolean subtract = false;
 
 		if (nextToken == Token.PLUS){
@@ -255,22 +222,37 @@ public class Parser{
 		}
 		else if (nextToken == Token.MINUS){
 			getNextToken();
-			isNegative = true;
+			firstTermIsNegative = true;
 		} 
 		do {
-			if (skipFirstIteration){
-				getNextToken();
+			if (skipsFirstIteration){
+				if (nextToken == Token.PLUS){
+					getNextToken();
+					if (term()){
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op1+op2);
+						continue;
+					}
+				}
+				else if (nextToken == Token.MINUS){
+					getNextToken();
+					if (term()){
+						int op1 = (int) sas.pop();
+						int op2 = (int) sas.pop();
+						sas.push(op2-op1);
+						continue;
+					}
+				}
 			}
 
-			if (term()){
-				if (isNegative){
+			if (term() && !skipsFirstIteration) {
+				if (firstTermIsNegative){
 					int topOperand = (int) sas.pop();
 					sas.push(-1 * topOperand);
-					isNegative = false;
+					firstTermIsNegative = false;
 				}
-				skipFirstIteration = true;
-
-
+				skipsFirstIteration = true;
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
@@ -556,7 +538,7 @@ public class Parser{
 			} while (nextToken == Token.COMMA);			
 			if (nextToken == Token.SEMICOLON){
 				//System.out.print("<semicolon>");
-				System.out.println("End of constants");
+				System.out.println("End of constants\n");
 				getNextToken();
 			}else return false;
 		}
