@@ -153,7 +153,7 @@ public class Parser{
 	// <factor> := ident | number | '(' expression ')'
 	private static boolean factor() {
 		if (nextToken == Token.USER_DEFINED_NAME) {
-			System.out.print("<ident>");
+			//System.out.print("<ident>");
 			pushIdentValue();
 			getNextToken();
 			return true;
@@ -212,7 +212,7 @@ public class Parser{
 
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
 	private static boolean expression() {
-		System.out.print("<expression />");
+		//System.out.print("<expression />");
 		if (nextToken == Token.PLUS){
 			//System.out.print("<+>");
 			getNextToken();
@@ -250,7 +250,7 @@ public class Parser{
 					else return false;
 				}
 			}
-			System.out.println("Reached end of expression! TOP OF STACK = "+sas.top().toString());
+			System.out.println("\nTOP OF STACK = "+sas.top().toString());
 			return true;
 		}
 		else return false;
@@ -274,12 +274,12 @@ public class Parser{
 	// <condition> := expression relOp expression
 	private static boolean condition() {
 		if (expression()){
-			System.out.println("\n<condition />");
-			System.out.println("</expression>");
+			//System.out.println("\n<condition />");
+			//System.out.println("</expression>");
 			if (relOp()) {
-				System.out.println("<relOp>");
+				//System.out.println("<relOp>");
 				if (expression()){
-					System.out.println("</expression>");
+					//System.out.println("</expression>");
 					return true;
 				}
 				else return false;
@@ -295,16 +295,16 @@ public class Parser{
 	// <iterativeStat> := 'while' condition 'do' statement
 	private static boolean iterativeStat() {
 		if (nextToken == Token.WHILE){
-			System.out.println("<iterativeStmt />");
-			System.out.print("<while>");
+			//System.out.println("<iterativeStmt />");
+			//System.out.print("<while>");
 			getNextToken();
 			if (condition()) {
-				System.out.println("</condition>");
+				//System.out.println("</condition>");
 				if (nextToken == Token.DO){
-					System.out.print("<do>");
+					//System.out.print("<do>");
 					getNextToken();
 					if (statement()){
-						System.out.print("</stmt>");
+						//System.out.print("</stmt>");
 						return true;
 					}
 					else {
@@ -318,7 +318,7 @@ public class Parser{
 			else return false;
 		}
 		else {
-			System.out.println("no while token boohoo");
+			System.out.println("no while token!");
 			return false;
 		}
 	}
@@ -326,21 +326,21 @@ public class Parser{
 	// <selectionStat> := 'if' condition 'then' statement 'else' statement
 	private static boolean selectionStat() {
 		if (nextToken == Token.IF){
-			System.out.print("<selectionStmt />\n");
-			System.out.print("<if>");
+			//System.out.print("<selectionStmt />\n");
+			//System.out.print("<if>");
 			getNextToken();
 			if (condition()) {
-				System.out.print("</condition>");
+				//System.out.print("</condition>");
 				if (nextToken == Token.THEN) {
-					System.out.print("<then>");
+					//System.out.print("<then>");
 					getNextToken();
 					if (statement()) {
-						System.out.print("\n</stmt>");
+						//System.out.print("\n</stmt>");
 						if (nextToken == Token.ELSE) {
-							System.out.print("\n<else>");
+							//System.out.print("\n<else>");
 							getNextToken();
 							if (statement()){
-								System.out.print("</stmt>");
+								//System.out.print("</stmt>");
 								return true;
 							}
 							else return false;
@@ -363,21 +363,21 @@ public class Parser{
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
 	private static boolean compoundStat() { 
 		if (nextToken == Token.BEGIN) {
-			System.out.print("<compoundStmt />");
-			System.out.print("\n<begin>");
+			//System.out.print("<compoundStmt />");
+			//System.out.print("\n<begin>");
 			getNextToken();
 			if (statement()) {
 				while(nextToken == Token.SEMICOLON){
-					System.out.print("<semicolon>");
+					//System.out.print("<semicolon>");
 					getNextToken();
 					if (statement()){
-						System.out.print("\n</stmt>");
+						//System.out.print("\n</stmt>");
 						continue;
 					}
 					else return false;
 				}
 				if (nextToken == Token.END){
-					System.out.print("\n<end>");
+					//System.out.print("\n<end>");
 					getNextToken();
 					return true;
 				}
@@ -391,11 +391,11 @@ public class Parser{
 	// <procedureCallStat> := 'call' ident
 	private static boolean procedureCallStat(){
 		if (nextToken == Token.CALL){
-			System.out.print("<procedureCallStmt />");
-			System.out.print("<call>");
+			//System.out.print("<procedureCallStmt />");
+			//System.out.print("<call>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
-				System.out.print("<ident>");
+				//System.out.print("<ident>");
 				pushIdentValue();
 				getNextToken();
 				return true;
@@ -411,15 +411,20 @@ public class Parser{
 	// <assignmentStat> := ident ':=' expression 
 	private static boolean assignmentStat(){
 		if (nextToken == Token.USER_DEFINED_NAME){
-			System.out.print("<asgnStmt />");
-			System.out.print("\n<ident>");
-			pushIdentValue();
+			//System.out.print("<asgnStmt />");
+			//System.out.print("\n<ident>");
+			String identifier = nextStr;
+			listOfVars.put(identifier, 0);
 			getNextToken();
 			if (nextToken == Token.ASSIGN_EQUAL){
-				System.out.print("<:=>");
+				//System.out.print("<:=>");
 				getNextToken();
 				if (expression()){
-					System.out.print("</expression>");
+					//System.out.print("</expression>");
+					int expressionRes = (int) sas.pop();
+					listOfVars.put(identifier, expressionRes);
+					System.out.println("Key-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString());
+					System.out.println("End of asgnStmt");
 					return true;
 				}
 				else return false;
@@ -431,21 +436,21 @@ public class Parser{
 
 	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
 	private static boolean statement() {
-		System.out.println("\n<stmt />");
+		//System.out.println("\n<stmt />");
 		if (assignmentStat()) { 
-			System.out.print("\n</asgnStmt>");
+			//System.out.print("\n</asgnStmt>");
 			return true; }
 		else if (procedureCallStat()) { 
-			System.out.print("\n</procedureCallStmt>");
+			//System.out.print("\n</procedureCallStmt>");
 			return true; }
 		else if (compoundStat()) { 
-			System.out.print("\n</compoundStmt>");
+			//System.out.print("\n</compoundStmt>");
 			return true; }
 		else if (selectionStat()) { 
-			System.out.print("\n</selectionStmt>");
+			//System.out.print("\n</selectionStmt>");
 			return true; }
 		else if (iterativeStat()) { 
-			System.out.print("\n</iterativeStmt>");
+			//System.out.print("\n</iterativeStmt>");
 			return true; }
 		else 
 			{
@@ -459,33 +464,39 @@ public class Parser{
 	*	   	   { 'procedure' ident ; block }
 	*	   	   statement                                             */
 	private static boolean block(){
-		System.out.print("\n<block />");
+		//System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
-			System.out.print("\n<constant>");
+			//System.out.print("\n<constant>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
-				System.out.print("<ident>");
-				pushIdentValue();
+				//System.out.print("<ident>");
+				String initIdent = nextStr;
 				getNextToken();
 				if (nextToken == Token.EQUAL){
-					System.out.print("<equal>");
+					//System.out.print("<equal>");
 					getNextToken();
 					if (nextToken == Token.NUMBER){
+						int myNumber = Integer.parseInt(nextStr);
+						listOfVars.put(initIdent, myNumber);
+						System.out.println("Key-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString());
 						getNextToken();
-						System.out.print("<number>");
+						//System.out.print("<number>");
 						while (nextToken == Token.COMMA){
-							System.out.print("<comma>");
+							//System.out.print("<comma>");
 							getNextToken();
 							if (nextToken == Token.USER_DEFINED_NAME){
-								System.out.print("<ident>");
-								pushIdentValue();
+								//System.out.print("<ident>");
+								String whileIdent = nextStr;
 								getNextToken();
 								if (nextToken == Token.EQUAL){
-									System.out.print("<equal>");
+									//System.out.print("<equal>");
 									getNextToken();
 									if (nextToken == Token.NUMBER){
+										int myWhileNumber = Integer.parseInt(nextStr);
+										listOfVars.put(whileIdent, myWhileNumber);
+										System.out.println("Key-> "+whileIdent+"\t\tValue-> "+listOfVars.get(whileIdent).toString());
 										getNextToken();
-										System.out.print("<number>");
+										//System.out.print("<number>");
 										continue;
 									}
 									else return false;
@@ -495,7 +506,8 @@ public class Parser{
 							else return false;
 						}
 						if (nextToken == Token.SEMICOLON){
-							System.out.print("<semicolon>");
+							//System.out.print("<semicolon>");
+							System.out.println("End of constants");
 							getNextToken();
 						}
 						else return false;
@@ -507,24 +519,24 @@ public class Parser{
 			else return false;
 		}
 		if (nextToken == Token.VARIABLE){
-			System.out.print("<variable>");
+			//System.out.print("<variable>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME){
-				System.out.print("<ident>");
-				pushIdentValue();
+				//System.out.print("<ident>");
+				//////==============> I STOPPED HERE
 				getNextToken();
 				while (nextToken == Token.COMMA){
-					System.out.print("<comma>");
+					//System.out.print("<comma>");
 					getNextToken();
 					if (nextToken == Token.USER_DEFINED_NAME){
-						System.out.print("<ident>");
+						//System.out.print("<ident>");
 						pushIdentValue();
 						getNextToken();
 						continue;
 					}
 				}
 				if (nextToken == Token.SEMICOLON){
-					System.out.print("<semicolon>");
+					//System.out.print("<semicolon>");
 					getNextToken();
 				}		
 				else return false;		
@@ -532,17 +544,17 @@ public class Parser{
 			else return false;
 		}
 		while (nextToken == Token.PROCEDURE){
-			System.out.print("\n<procedure>");
+			//System.out.print("\n<procedure>");
 			getNextToken();
 			if (nextToken == Token.USER_DEFINED_NAME) {
-				System.out.print("<ident>");
+				//System.out.print("<ident>");
 				pushIdentValue();
 				getNextToken();
 				if (nextToken == Token.SEMICOLON){
-					System.out.print("<semicolon>");
+					//System.out.print("<semicolon>");
 					getNextToken();
 					if (block()) {
-						System.out.print("\n</block>");
+						//System.out.print("\n</block>");
 						continue;
 					}
 					else return false;
@@ -552,7 +564,7 @@ public class Parser{
 			else return false;
 		}
 		if (statement()) {
-			System.out.print("\n</stmt>");
+			//System.out.print("\n</stmt>");
 			return true;
 		}
 		else {
@@ -564,7 +576,7 @@ public class Parser{
 	// <program> := block $
 	private static boolean program(){
 		if (block()){
-			System.out.print("\n</block>");
+			//System.out.print("\n</block>");
 			if (nextToken == Token.END_OF_INPUT) return true;
 			else {
 				System.out.println("Missing end of input! token="+nextToken);

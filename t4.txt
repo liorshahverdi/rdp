@@ -1,0 +1,2 @@
+const abc = 123 , def = 111 , fde = 5813 ;
+s5 := fde + def $
