@@ -464,85 +464,52 @@ public class Parser{
 	*	   	   { 'procedure' ident ; block }
 	*	   	   statement                                             */
 	private static boolean block(){
+		//       [ 'const' ident = number { , ident = number } ; ]
 		//System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
 			//System.out.print("\n<constant>");
-			getNextToken();
-			if (nextToken == Token.USER_DEFINED_NAME) {
-				//System.out.print("<ident>");
-				String initIdent = nextStr;
+			do {
 				getNextToken();
-				if (nextToken == Token.EQUAL){
-					//System.out.print("<equal>");
+				if (nextToken == Token.USER_DEFINED_NAME) {
+					//System.out.print("<ident>");
+					String initIdent = nextStr;
 					getNextToken();
-					if (nextToken == Token.NUMBER){
-						int myNumber = Integer.parseInt(nextStr);
-						listOfVars.put(initIdent, myNumber);
-						System.out.println("Key-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString());
+					if (nextToken == Token.EQUAL){
+						//System.out.print("<equal>");
 						getNextToken();
-						//System.out.print("<number>");
-						while (nextToken == Token.COMMA){
-							//System.out.print("<comma>");
+						if (nextToken == Token.NUMBER){
+							int myNumber = Integer.parseInt(nextStr);
+							listOfVars.put(initIdent, myNumber);
+							System.out.println("Key-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString());
 							getNextToken();
-							if (nextToken == Token.USER_DEFINED_NAME){
-								//System.out.print("<ident>");
-								String whileIdent = nextStr;
-								getNextToken();
-								if (nextToken == Token.EQUAL){
-									//System.out.print("<equal>");
-									getNextToken();
-									if (nextToken == Token.NUMBER){
-										int myWhileNumber = Integer.parseInt(nextStr);
-										listOfVars.put(whileIdent, myWhileNumber);
-										System.out.println("Key-> "+whileIdent+"\t\tValue-> "+listOfVars.get(whileIdent).toString());
-										getNextToken();
-										//System.out.print("<number>");
-										continue;
-									}
-									else return false;
-								}
-								else return false;	
-							}
-							else return false;
-						}
-						if (nextToken == Token.SEMICOLON){
-							//System.out.print("<semicolon>");
-							System.out.println("End of constants");
-							getNextToken();
-						}
-						else return false;
-					}
-					else return false;
-				}
-				else return false;
-			}
-			else return false;
+							//System.out.print("<number>");
+						}else return false;
+					}else return false; 
+				}else return false;
+			} while (nextToken == Token.COMMA);			
+			if (nextToken == Token.SEMICOLON){
+				//System.out.print("<semicolon>");
+				System.out.println("End of constants");
+				getNextToken();
+			}else return false;
 		}
+		//        [ 'var' ident { , ident } ; ]
 		if (nextToken == Token.VARIABLE){
 			//System.out.print("<variable>");
-			getNextToken();
-			if (nextToken == Token.USER_DEFINED_NAME){
-				//System.out.print("<ident>");
-				//////==============> I STOPPED HERE
+			do {
 				getNextToken();
-				while (nextToken == Token.COMMA){
-					//System.out.print("<comma>");
+				if (nextToken == Token.USER_DEFINED_NAME){
+					//System.out.print("<ident>");
 					getNextToken();
-					if (nextToken == Token.USER_DEFINED_NAME){
-						//System.out.print("<ident>");
-						pushIdentValue();
-						getNextToken();
-						continue;
-					}
 				}
-				if (nextToken == Token.SEMICOLON){
-					//System.out.print("<semicolon>");
-					getNextToken();
-				}		
-				else return false;		
-			}
-			else return false;
+			} while (nextToken == Token.COMMA);	
+			if (nextToken == Token.SEMICOLON){
+				//System.out.print("<semicolon>");
+				getNextToken();
+			}else return false;		
 		}
+		//           { 'procedure' ident ; block }
+		//			 statement  
 		while (nextToken == Token.PROCEDURE){
 			//System.out.print("\n<procedure>");
 			getNextToken();
