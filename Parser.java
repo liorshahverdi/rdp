@@ -138,11 +138,17 @@ public class Parser{
 	}
 
 	private static void pushIdentValue() {
-		try{
-			int identVal = (int) listOfVars.get(nextStr);
-			//System.out.println("idval = "+identVal);
-			sas.push(identVal);
-		} catch (NullPointerException e){System.out.println(e);}		
+		//Object val = listOfVars.get(nextStr);
+		if (listOfVars.get(nextStr) instanceof Integer){
+			try{
+				int identVal = (int) listOfVars.get(nextStr);
+				//System.out.println("idval = "+identVal);
+				sas.push(identVal);
+			} catch (NullPointerException e){System.out.println(e);}
+		}
+		else if (listOfVars.get(nextStr) instanceof String){
+			//System.out.println("It's a string!");
+		}		
 	}
 
 	private static void pushNumberTokenValue() {
@@ -287,8 +293,7 @@ public class Parser{
 				System.out.println("relOp is NOT true! nt ="+nextToken+"\tstr = "+nextStr);
 				return false;
 			}
-		}
-		else return false;
+		}else return false;
 	}
 	
 	// <iterativeStat> := 'while' condition 'do' statement
@@ -310,11 +315,8 @@ public class Parser{
 						System.out.print(" Improper statement! \tnt = "+nextToken);
 						return false;
 					}
-				
-				}
-				else return false;
-			}
-			else return false;
+				}else return false;
+			}else return false;
 		}
 		else {
 			System.out.println("no while token!");
@@ -341,16 +343,11 @@ public class Parser{
 							if (statement()){
 								//System.out.print("</stmt>");
 								return true;
-							}
-							else return false;
-						}
-						else return false;
-					}
-					else return false;
-				}
-				else return false;
-			}
-			else return false;
+							}else return false;
+						}else return false;
+					}else return false;
+				}else return false;
+			}else return false;
 		}
 		else {
 			System.out.println("No if:( nt = "+nextToken);
@@ -487,7 +484,7 @@ public class Parser{
 				if (nextToken == Token.USER_DEFINED_NAME){
 					//System.out.print("<ident>");
 					if (listOfVars.get(nextStr) == null){
-						listOfVars.put(nextStr, 0);
+						listOfVars.put(nextStr, "Not Initialized");
 					}
 					System.out.println("Key-> "+nextStr+"\t\tValue-> "+listOfVars.get(nextStr).toString());
 					getNextToken();
