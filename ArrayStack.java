@@ -27,7 +27,7 @@ public class ArrayStack<T> implements IStack<T>
   }
   else
   {
-   System.out.println("Error in ArrayStack.push() � Stack Full ");
+   System.out.println("Error in ArrayStack.push() Stack Full ");
   }
  }
  
@@ -35,7 +35,7 @@ public class ArrayStack<T> implements IStack<T>
  {
   if (isEmpty())
   {
-   System.out.println("Error in ArrayStack.pop() � Stack Empty ");
+   System.out.println("Error in ArrayStack.pop() Stack Empty ");
    return null;
   }
   else
@@ -50,7 +50,7 @@ public class ArrayStack<T> implements IStack<T>
  {
   if (isEmpty())
   {
-   System.out.println("Error in ArrayStack.top() � Stack Empty ");
+   System.out.println("Error in ArrayStack.top() Stack Empty ");
    return null;
   }
   else

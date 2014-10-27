@@ -17,7 +17,6 @@ public class Parser{
 	private static String[] lexemeArray;
 	private static int lexArrLen;
 	private static int lexemeIndex;
-
 	private static ArrayStack sas; 
 	private static HashMap listOfVars;
 
@@ -81,7 +80,6 @@ public class Parser{
 		lexemeIndex = 0;
 		lexemeArray = file.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
-
 		sas = new ArrayStack(100);
 		listOfVars = new HashMap();
 	}
@@ -145,9 +143,6 @@ public class Parser{
 				//System.out.println("idval = "+identVal);
 				sas.push(identVal);
 			} catch (NullPointerException e){System.out.println(e);}
-		}
-		else if (listOfVars.get(nextStr) instanceof String){
-			//System.out.println("It's a string!");
 		}		
 	}
 
@@ -176,12 +171,9 @@ public class Parser{
 				if (nextToken == Token.CLOSEPAREN){
 					getNextToken();
 					return true;
-				}
-				else return false;
-			}
-			else return false;
-		}
-		else return false;
+				}else return false;
+			}else return false;
+		}else return false;
 	}
 
 	// <term> := factor {(*|/) factor } 
@@ -196,8 +188,7 @@ public class Parser{
 						int op2 = (int) sas.pop();
 						sas.push(op1*op2);
 						continue;
-					}
-					else return false;
+					}else return false;
 				}
 				else if (nextToken == Token.DIVIDE){
 					getNextToken();
@@ -206,14 +197,14 @@ public class Parser{
 						int op2 = (int) sas.pop();
 						sas.push(op2/op1);
 						continue;
-					}
-					else return false;
-				}
+					}else return false;
+				}else return false;
 			}
 			if (factor()){
 				workaround = true;
 			}else return false;
 		} while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE);
+		System.out.println("TOP OF STACK -> "+sas.top().toString());
 		return true;
 	}
 
@@ -259,6 +250,7 @@ public class Parser{
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
+		System.out.println("TOP OF STACK -> "+sas.top().toString());
 		return true;
 	}
 
@@ -286,8 +278,7 @@ public class Parser{
 				if (expression()){
 					//System.out.println("</expression>");
 					return true;
-				}
-				else return false;
+				}else return false;
 			}
 			else {
 				System.out.println("relOp is NOT true! nt ="+nextToken+"\tstr = "+nextStr);
@@ -382,8 +373,7 @@ public class Parser{
 				pushIdentValue();
 				getNextToken();
 				return true;
-			}
-			else return false;
+			}else return false;
 		}
 		else {
 			//System.out.println("No procedure call today\tnt = "+nextToken);
@@ -407,14 +397,11 @@ public class Parser{
 					int expressionRes = (int) sas.pop();
 					listOfVars.put(identifier, expressionRes);
 					System.out.println("Key-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString());
-					System.out.println("End of asgnStmt");
+					System.out.println("End of asgnStmt\n");
 					return true;
-				}
-				else return false;
-			}
-			else return false;
-		}
-		else return false;
+				}else return false;
+			}else return false;
+		}else return false;
 	}
 
 	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
@@ -511,12 +498,9 @@ public class Parser{
 					if (block()) {
 						//System.out.print("\n</block>");
 						continue;
-					}
-					else return false;
-				}
-				else return false;
-			}
-			else return false;
+					}else return false;
+				}else return false;
+			}else return false;
 		}
 		if (statement()) {
 			//System.out.print("\n</stmt>");
@@ -537,11 +521,8 @@ public class Parser{
 				System.out.println("Missing end of input! token="+nextToken);
 				return false;
 			}
-		}
-		else return false;
+		}else return false;
 	}
 	
-	public static void main(String[] args){
-		Parser p = new Parser();
-	}
+	public static void main(String[] args) { Parser p = new Parser(); }
 }
