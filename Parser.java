@@ -277,10 +277,7 @@ public class Parser{
 					return true;
 				}else return false;
 			}
-			else {
-				System.out.println("relOp is NOT true! nt ="+nextToken+"\tstr = "+nextStr);
-				return false;
-			}
+			else throw new ParseException("ImroperRelationalOperatorException-> "+nextStr);
 		}else return false;
 	}
 	
