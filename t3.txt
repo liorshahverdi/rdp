@@ -1,2 +1,4 @@
-const abc = 123 , def = 321 , fde = 5813 ;
-s5 := 9 - 3 * 4 * 5 $
+const abc = 123 , fde = 5813 ;
+var gi , def , no ;
+procedure gi ; def := 7x
+s5 := - 9 - 5 * def $

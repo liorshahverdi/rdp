@@ -20,7 +20,7 @@ public class Parser{
 	private static ArrayStack sas; 
 	private static HashMap listOfVars;
 
-	public Parser()
+	public Parser() throws ParseException
 	{
 		boolean continueScan = true;
 		while (continueScan){
@@ -51,7 +51,7 @@ public class Parser{
  		COMMA(","), SEMICOLON(";"), ASSIGN_EQUAL(":="),
  		EQUAL("="), NOT_EQUAL("!="), LESS_THAN("<"), GREATER_THAN(">"), LESS_THAN_EQUAL_TO("<="), GREATER_THAN_EQUAL_TO(">="),
 		PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"),
-		NUMBER("0000"), USER_DEFINED_NAME("---"), END_OF_INPUT("$");
+		NUMBER("0101"), USER_DEFINED_NAME("identx0"), END_OF_INPUT("$");
 		
 		private String str;
 
@@ -87,7 +87,7 @@ public class Parser{
 	/*
 	*	The commenceParsing method calls the start symbol in our grammar (top-down). 
 	*/
-	private static void commenceParsing(){
+	private static void commenceParsing() throws ParseException{
 		if (program()){
 			System.out.println("\nProgram is Syntactically Correct!");
 		}
@@ -103,7 +103,7 @@ public class Parser{
 	*	selected by the regular expression for user defined names or number, then our string value 
 	*	is null and therefore is an invalid token. 
 	*/
-	private static void getNextToken(){
+	private static void getNextToken() throws ParseException{
 		if (lexemeIndex <= (lexArrLen-1)) {
 			nextStr = lexemeArray[lexemeIndex];
 			if (lexemeIndex < (lexArrLen-1)) lexemeIndex++;
@@ -120,22 +120,21 @@ public class Parser{
 				if (nextStr.matches("[a-zA-Z]{1}[\\w]*")){
 					nextToken = Token.USER_DEFINED_NAME;
 				}
-				if (nextStr.matches("[0-9]+")){
+				else if (nextStr.matches("[0-9]+")){
 					nextToken = Token.NUMBER;
 				}
-				if (nextToken == null) {
-					System.out.println("INVALID ==>"+nextStr);
-					System.exit(0);
+				else if (nextToken == null) {
+					throw new ParseException("InvalidTokenException!-> "+ nextStr);
 				}
 			}
 		}
 		else {
-			System.out.println("Array out of bounds exception!\t lexemeIndex = "+lexemeIndex);
+			System.out.println("lexemeIndex = "+lexemeIndex);
 			System.exit(0);
 		}
 	}
 
-	private static void pushIdentValue() {
+	private static void pushIdentValue() throws ParseException{
 		//Object val = listOfVars.get(nextStr);
 		if (listOfVars.get(nextStr) instanceof Integer){
 			try{
@@ -146,13 +145,13 @@ public class Parser{
 		}		
 	}
 
-	private static void pushNumberTokenValue() {
+	private static void pushNumberTokenValue() throws ParseException{
 		int tokVal = Integer.parseInt(nextStr);
-		sas.push(tokVal);
+		sas.push(tokVal);	
 	}
 
 	// <factor> := ident | number | '(' expression ')'
-	private static boolean factor() {
+	private static boolean factor()throws ParseException{
 		if (nextToken == Token.USER_DEFINED_NAME) {
 			//System.out.print("<ident>");
 			pushIdentValue();
@@ -177,7 +176,7 @@ public class Parser{
 	}
 
 	// <term> := factor {(*|/) factor } 
-	private static boolean term() {
+	private static boolean term() throws ParseException{
 		boolean workaround = false;
 		do {
 			if (workaround){
@@ -194,7 +193,7 @@ public class Parser{
 					getNextToken();
 					if (factor()) {
 						int op1 = (int) sas.pop();
-						int op2 = (int) sas.pop();
+						int op2 = (int) sas.pop(); 
 						sas.push(op2/op1);
 						continue;
 					}else return false;
@@ -204,12 +203,11 @@ public class Parser{
 				workaround = true;
 			}else return false;
 		} while (nextToken == Token.MULTIPLY || nextToken == Token.DIVIDE);
-		System.out.println("TOP OF STACK -> "+sas.top().toString());
 		return true;
 	}
 
 	// <expression> := ['+' | '-'] term {('+'|'-') term} 
-	private static boolean expression() {
+	private static boolean expression() throws ParseException{
 		boolean firstTermIsNegative = false;
 		boolean skipsFirstIteration = false;
 		if (nextToken == Token.PLUS){
@@ -250,12 +248,11 @@ public class Parser{
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
-		System.out.println("TOP OF STACK -> "+sas.top().toString());
 		return true;
 	}
 
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
-	private static boolean relOp(){
+	private static boolean relOp()throws ParseException{
 		switch (nextToken) {
 			case EQUAL: case NOT_EQUAL: case LESS_THAN:
 			case GREATER_THAN: case LESS_THAN_EQUAL_TO: case GREATER_THAN_EQUAL_TO: {
@@ -269,7 +266,7 @@ public class Parser{
 	}
 
 	// <condition> := expression relOp expression
-	private static boolean condition() {
+	private static boolean condition() throws ParseException{
 		if (expression()){
 			//System.out.println("\n<condition />");
 			//System.out.println("</expression>");
@@ -288,7 +285,7 @@ public class Parser{
 	}
 	
 	// <iterativeStat> := 'while' condition 'do' statement
-	private static boolean iterativeStat() {
+	private static boolean iterativeStat()throws ParseException{
 		if (nextToken == Token.WHILE){
 			//System.out.println("<iterativeStmt />");
 			//System.out.print("<while>");
@@ -310,13 +307,12 @@ public class Parser{
 			}else return false;
 		}
 		else {
-			System.out.println("no while token!");
 			return false;
 		}
 	}
 
 	// <selectionStat> := 'if' condition 'then' statement 'else' statement
-	private static boolean selectionStat() {
+	private static boolean selectionStat()throws ParseException{
 		if (nextToken == Token.IF){
 			//System.out.print("<selectionStmt />\n");
 			//System.out.print("<if>");
@@ -341,13 +337,12 @@ public class Parser{
 			}else return false;
 		}
 		else {
-			System.out.println("No if:( nt = "+nextToken);
 			return false;
 		}
 	}
 	
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
-	private static boolean compoundStat() {
+	private static boolean compoundStat()throws ParseException{
 		if (nextToken == Token.BEGIN){
 			do{
 				getNextToken();
@@ -363,7 +358,7 @@ public class Parser{
 	}
 	
 	// <procedureCallStat> := 'call' ident
-	private static boolean procedureCallStat(){
+	private static boolean procedureCallStat()throws ParseException{
 		if (nextToken == Token.CALL){
 			//System.out.print("<procedureCallStmt />");
 			//System.out.print("<call>");
@@ -382,7 +377,7 @@ public class Parser{
 	}
 
 	// <assignmentStat> := ident ':=' expression 
-	private static boolean assignmentStat(){
+	private static boolean assignmentStat() throws ParseException{
 		if (nextToken == Token.USER_DEFINED_NAME){
 			//System.out.print("<asgnStmt />");
 			//System.out.print("\n<ident>");
@@ -400,12 +395,12 @@ public class Parser{
 					System.out.println("End of asgnStmt\n");
 					return true;
 				}else return false;
-			}else return false;
+			}else throw new ParseException("MissingAssignEqualsException! "+nextStr);
 		}else return false;
 	}
 
 	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
-	private static boolean statement() {
+	private static boolean statement() throws ParseException{
 		//System.out.println("\n<stmt />");
 		if (assignmentStat()) { 
 			//System.out.print("\n</asgnStmt>");
@@ -422,18 +417,18 @@ public class Parser{
 		else if (iterativeStat()) { 
 			//System.out.print("\n</iterativeStmt>");
 			return true; }
-		else 
-			{
-				System.out.print("No statement today :((");
-				return false;
-			}
+		else {
+			String temp = "";
+			for (String x : lexemeArray) temp+= x+" ";
+			throw new ParseException("ImproperStatementException-> "+temp);
+		}
 	}
 
 	/*		   [ 'const' ident = number { , ident = number } ; ]
 	*	   	   [ 'var' ident { , ident } ; ]
 	*	   	   { 'procedure' ident ; block }
 	*	   	   statement                                             */
-	private static boolean block(){
+	private static boolean block() throws ParseException{
 		//       [ 'const' ident = number { , ident = number } ; ]
 		//System.out.print("\n<block />");
 		if (nextToken == Token.CONSTANT) {
@@ -453,7 +448,7 @@ public class Parser{
 							System.out.println("Key-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString());
 							getNextToken();
 							//System.out.print("<number>");
-						}else return false;
+						}else throw new ParseException("MissingConstantToNumberBindingException-> "+nextStr);
 					}else return false; 
 				}else return false;
 			} while (nextToken == Token.COMMA);			
@@ -513,16 +508,17 @@ public class Parser{
 	}
 
 	// <program> := block $
-	private static boolean program(){
+	private static boolean program() throws ParseException{
 		if (block()){
 			//System.out.print("\n</block>");
 			if (nextToken == Token.END_OF_INPUT) return true;
-			else {
-				System.out.println("Missing end of input! token="+nextToken);
-				return false;
-			}
+			else throw new ParseException("MissingEndOfInputTokenException!");
 		}else return false;
 	}
 	
-	public static void main(String[] args) { Parser p = new Parser(); }
+	public static void main(String[] args) { 
+		try {
+			Parser p = new Parser(); 
+		}catch(ParseException e){System.out.println(e.getMessage());} 
+	}
 }

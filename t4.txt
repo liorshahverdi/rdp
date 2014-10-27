@@ -1,2 +1,2 @@
-const abc = 123 , def = 111 , fde = 5813 ;
-s5 := fde + def $
+const abc = 123 , zero = 0 ;
+s5 := abc $

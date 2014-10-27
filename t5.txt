@@ -1,2 +1,2 @@
-const abc = 123 , def = 6 , fde = 5813 ;
-s5 := - 9 - 5 + 9 * 8 - 4 / def $
+const ident1 = 2 , ident2 = string ;
+s1 := 2 * 4 $
