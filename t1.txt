@@ -1,4 +1,0 @@
-const abc = 123 , fde = 5813 ;
-var gi , def , no ;
-procedure gi ; 5no := 5
-s5 := - 9 - 5 * def $

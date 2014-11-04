@@ -1,2 +1,0 @@
-const ident1 = 2 , ident2 = string ;
-s1 := 2 * 4 $

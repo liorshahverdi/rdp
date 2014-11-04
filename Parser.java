@@ -11,7 +11,7 @@ import java.util.*;
 import java.io.*;
 
 public class Parser{
-	private static Scanner file = null;
+	private static Scanner fileReader = null;
 	private static String nextStr;
 	private static Token nextToken;
 	private static String[] lexemeArray;
@@ -19,6 +19,8 @@ public class Parser{
 	private static int lexemeIndex;
 	private static ArrayStack sas; 
 	private static HashMap listOfVars;
+
+	private static String message;
 
 	public Parser() throws ParseException
 	{
@@ -28,7 +30,7 @@ public class Parser{
 			Scanner inputScan = new Scanner(System.in);
 			String filename = inputScan.next();
 			try
-			{file = new Scanner(new File(filename));} 
+			{fileReader = new Scanner(new File(filename));} 
 			catch (FileNotFoundException e)
 			{
 				System.out.println("File "+filename+" is not found");
@@ -43,6 +45,16 @@ public class Parser{
 			else if (nextChar.equals("Y")) continue;
 		}
 	}
+
+	public Parser(String file) throws ParseException
+	{
+		fileReader = new Scanner(file);
+		init();
+		getNextToken();
+		commenceParsing();
+	}
+
+	public String getMyMessage(){ return message; }
 
 	private enum Token{
 		//terminal symbols
@@ -77,8 +89,9 @@ public class Parser{
 	}
 
 	private static void init(){
+		message = "";
 		lexemeIndex = 0;
-		lexemeArray = file.nextLine().split(" ");
+		lexemeArray = fileReader.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
 		sas = new ArrayStack(100);
 		listOfVars = new HashMap();
@@ -89,10 +102,10 @@ public class Parser{
 	*/
 	private static void commenceParsing() throws ParseException{
 		if (program()){
-			System.out.println("\nProgram is Syntactically Correct!");
+			message += "\nProgram is Syntactically Correct!\n";
 		}
 		else {
-			System.out.println("Syntax Error!\tnextStr = "+nextStr);
+			message += "Syntax Error!\tnextStr = "+nextStr;
 			System.exit(0);
 		}
 	}
@@ -109,8 +122,8 @@ public class Parser{
 			if (lexemeIndex < (lexArrLen-1)) lexemeIndex++;
 			else if (lexemeIndex == (lexArrLen-1)){
 				lexemeIndex = 0;
-				if (file.hasNextLine()){
-					lexemeArray = file.nextLine().split(" ");
+				if (fileReader.hasNextLine()){
+					lexemeArray = fileReader.nextLine().split(" ");
 					lexArrLen = lexemeArray.length;
 				}
 			}
@@ -129,7 +142,7 @@ public class Parser{
 			}
 		}
 		else {
-			System.out.println("lexemeIndex = "+lexemeIndex);
+			message += "error in getNextToken! lexemeIndex = "+lexemeIndex;
 			System.exit(0);
 		}
 	}
@@ -226,7 +239,7 @@ public class Parser{
 						int op2 = (int) sas.pop();
 						sas.push(op1+op2);
 						continue;
-					}
+					}else return false;
 				}
 				else if (nextToken == Token.MINUS){
 					getNextToken();
@@ -235,7 +248,7 @@ public class Parser{
 						int op2 = (int) sas.pop();
 						sas.push(op2-op1);
 						continue;
-					}
+					}else return false;
 				}
 			}
 			if (term() && !skipsFirstIteration) {
@@ -277,7 +290,7 @@ public class Parser{
 					return true;
 				}else return false;
 			}
-			else throw new ParseException("ImroperRelationalOperatorException-> "+nextStr);
+			else throw new ParseException("ImproperRelationalOperatorException-> "+nextStr);
 		}else return false;
 	}
 	
@@ -297,7 +310,7 @@ public class Parser{
 						return true;
 					}
 					else {
-						System.out.print(" Improper statement! \tnt = "+nextToken);
+						message += " Improper statement! \tnt = "+nextToken;
 						return false;
 					}
 				}else return false;
@@ -388,11 +401,11 @@ public class Parser{
 					//System.out.print("</expression>");
 					int expressionRes = (int) sas.pop();
 					listOfVars.put(identifier, expressionRes);
-					System.out.println("Key-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString());
-					System.out.println("End of asgnStmt\n");
+					message += "\nKey-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString();
+					message += "\nEnd of asgnStmt\n";
 					return true;
 				}else return false;
-			}else throw new ParseException("MissingAssignEqualsException! "+nextStr);
+			}else return false;
 		}else return false;
 	}
 
@@ -442,7 +455,7 @@ public class Parser{
 						if (nextToken == Token.NUMBER){
 							int myNumber = Integer.parseInt(nextStr);
 							listOfVars.put(initIdent, myNumber);
-							System.out.println("Key-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString());
+							message += "\nKey-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString();
 							getNextToken();
 							//System.out.print("<number>");
 						}else throw new ParseException("MissingConstantToNumberBindingException-> "+nextStr);
@@ -451,7 +464,7 @@ public class Parser{
 			} while (nextToken == Token.COMMA);			
 			if (nextToken == Token.SEMICOLON){
 				//System.out.print("<semicolon>");
-				System.out.println("End of constants\n");
+				message += "\nEnd of constants\n";
 				getNextToken();
 			}else return false;
 		}
@@ -465,13 +478,13 @@ public class Parser{
 					if (listOfVars.get(nextStr) == null){
 						listOfVars.put(nextStr, "Not Initialized");
 					}
-					System.out.println("Key-> "+nextStr+"\t\tValue-> "+listOfVars.get(nextStr).toString());
+					message += "\nKey-> "+nextStr+"\t\tValue-> "+listOfVars.get(nextStr).toString();
 					getNextToken();
 				}
 			} while (nextToken == Token.COMMA);	
 			if (nextToken == Token.SEMICOLON){
 				//System.out.print("<semicolon>");
-				System.out.println("End of variables\n");
+				message += "\nEnd of variables\n";
 				getNextToken();
 			}else return false;		
 		}
@@ -499,7 +512,7 @@ public class Parser{
 			return true;
 		}
 		else {
-			System.out.println("Statement syntax error!\t"+nextStr);
+			message += "Statement syntax error!\t"+nextStr;
 			return false;
 		}
 	}
@@ -508,7 +521,11 @@ public class Parser{
 	private static boolean program() throws ParseException{
 		if (block()){
 			//System.out.print("\n</block>");
-			if (nextToken == Token.END_OF_INPUT) return true;
+			if (nextToken == Token.END_OF_INPUT) 
+			{
+				if (lexemeIndex > 1) throw new ParseException("unreachable code after END_OF_INPUT token exception");
+				return true;
+			}
 			else throw new ParseException("MissingEndOfInputTokenException!");
 		}else return false;
 	}
