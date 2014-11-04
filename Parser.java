@@ -137,12 +137,12 @@ public class Parser{
 					nextToken = Token.NUMBER;
 				}
 				else if (nextToken == null) {
-					throw new ParseException("InvalidTokenException!-> "+ nextStr);
+					throw new ParseException("Invalid Token Error-> "+ nextStr);
 				}
 			}
 		}
 		else {
-			message += "error in getNextToken! lexemeIndex = "+lexemeIndex;
+			message += "\nerror in getNextToken! lexemeIndex = "+lexemeIndex;
 			System.exit(0);
 		}
 	}
@@ -183,8 +183,8 @@ public class Parser{
 				if (nextToken == Token.CLOSEPAREN){
 					getNextToken();
 					return true;
-				}else return false;
-			}else return false;
+				}else throw new ParseException("Missing Close Parentheses (')') Token");
+			}else throw new ParseException("Improper Expression");
 		}else return false;
 	}
 
@@ -250,6 +250,7 @@ public class Parser{
 						continue;
 					}else return false;
 				}
+				else throw new ParseException("Missing binary operator token");
 			}
 			if (term() && !skipsFirstIteration) {
 				if (firstTermIsNegative){
@@ -261,6 +262,7 @@ public class Parser{
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
+		message += "\nTOP OF STACK -> "+sas.top().toString();
 		return true;
 	}
 
@@ -290,7 +292,7 @@ public class Parser{
 					return true;
 				}else return false;
 			}
-			else throw new ParseException("ImproperRelationalOperatorException-> "+nextStr);
+			else throw new ParseException("Missing relational operator");
 		}else return false;
 	}
 	
@@ -309,16 +311,10 @@ public class Parser{
 						//System.out.print("</stmt>");
 						return true;
 					}
-					else {
-						message += " Improper statement! \tnt = "+nextToken;
-						return false;
-					}
-				}else return false;
-			}else return false;
-		}
-		else {
-			return false;
-		}
+					else throw new ParseException("Improper Statement");
+				}else throw new ParseException("Missing Do Token");
+			}else throw new ParseException("Improper Condition");
+		}else return false;
 	}
 
 	// <selectionStat> := 'if' condition 'then' statement 'else' statement
@@ -341,9 +337,9 @@ public class Parser{
 								//System.out.print("</stmt>");
 								return true;
 							}else return false;
-						}else return false;
+						}else throw new ParseException("Missing Else Token!");
 					}else return false;
-				}else return false;
+				}else throw new ParseException("Missing Then Token!");
 			}else return false;
 		}
 		else {
@@ -363,7 +359,7 @@ public class Parser{
 			if (nextToken == Token.END){
 				getNextToken();
 				return true;
-			}else return false;
+			}else throw new ParseException("Missing End Token");
 		}else return false;
 	}
 	
@@ -378,7 +374,7 @@ public class Parser{
 				pushIdentValue();
 				getNextToken();
 				return true;
-			}else return false;
+			}else throw new ParseException("Missing identifier token");
 		}
 		else {
 			//System.out.println("No procedure call today\tnt = "+nextToken);
@@ -405,7 +401,7 @@ public class Parser{
 					message += "\nEnd of asgnStmt\n";
 					return true;
 				}else return false;
-			}else return false;
+			}else throw new ParseException("Missing Assign Equals Token");
 		}else return false;
 	}
 
@@ -430,7 +426,7 @@ public class Parser{
 		else {
 			String temp = "";
 			for (String x : lexemeArray) temp+= x+" ";
-			throw new ParseException("ImproperStatementException-> "+temp);
+			throw new ParseException("Improper Statement-> "+temp);
 		}
 	}
 
@@ -458,15 +454,15 @@ public class Parser{
 							message += "\nKey-> "+initIdent+"\t\tValue-> "+listOfVars.get(initIdent).toString();
 							getNextToken();
 							//System.out.print("<number>");
-						}else throw new ParseException("MissingConstantToNumberBindingException-> "+nextStr);
-					}else return false; 
-				}else return false;
+						}else throw new ParseException("Missing Number Token");
+					}else throw new ParseException("Missing Equal Token"); 
+				}else throw new ParseException("Missing Identifier Token");
 			} while (nextToken == Token.COMMA);			
 			if (nextToken == Token.SEMICOLON){
 				//System.out.print("<semicolon>");
 				message += "\nEnd of constants\n";
 				getNextToken();
-			}else return false;
+			}else throw new ParseException("Missing Semicolon Token");
 		}
 		//        [ 'var' ident { , ident } ; ]
 		if (nextToken == Token.VARIABLE){
@@ -486,7 +482,7 @@ public class Parser{
 				//System.out.print("<semicolon>");
 				message += "\nEnd of variables\n";
 				getNextToken();
-			}else return false;		
+			}else throw new ParseException("Missing Semicolon to end variable declarations");		
 		}
 		//           { 'procedure' ident ; block }
 		//			 statement  
@@ -504,29 +500,22 @@ public class Parser{
 						//System.out.print("\n</block>");
 						continue;
 					}else return false;
-				}else return false;
+				}else throw new ParseException("Missing Semicolon Token");
 			}else return false;
 		}
 		if (statement()) {
 			//System.out.print("\n</stmt>");
 			return true;
 		}
-		else {
-			message += "Statement syntax error!\t"+nextStr;
-			return false;
-		}
+		else throw new ParseException("Improper Statement->"+lexemeArray);
 	}
 
 	// <program> := block $
 	private static boolean program() throws ParseException{
 		if (block()){
 			//System.out.print("\n</block>");
-			if (nextToken == Token.END_OF_INPUT) 
-			{
-				if (lexemeIndex > 1) throw new ParseException("unreachable code after END_OF_INPUT token exception");
-				return true;
-			}
-			else throw new ParseException("MissingEndOfInputTokenException!");
+			if (nextToken == Token.END_OF_INPUT) return true;
+			else throw new ParseException("Missing End of Input Token");
 		}else return false;
 	}
 	
