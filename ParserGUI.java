@@ -61,7 +61,7 @@ public class ParserGUI extends JFrame implements ActionListener
 			String f = ia.getText();
 			try {
 				p = new Parser(f);
-				String updatedMessage = p.getMyMessage();
+				String updatedMessage = p.getMyGUIMessage();
 				oa.setText(updatedMessage);
 			} catch (Exception ex) { 
 				String e1 = ""+ex; 

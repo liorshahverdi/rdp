@@ -13,6 +13,7 @@ import java.io.*;
 public class Parser{
 	private static Scanner fileReader = null;
 	private static String nextStr;
+	private static String relOpToUse;
 	private static Token nextToken;
 	private static String[] lexemeArray;
 	private static int lexArrLen;
@@ -54,7 +55,7 @@ public class Parser{
 		commenceParsing();
 	}
 
-	public String getMyMessage(){ return message; }
+	public String getMyGUIMessage(){ return message; }
 
 	private enum Token{
 		//terminal symbols
@@ -90,6 +91,7 @@ public class Parser{
 
 	private static void init(){
 		message = "";
+		relOpToUse = null;
 		lexemeIndex = 0;
 		lexemeArray = fileReader.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
@@ -269,8 +271,33 @@ public class Parser{
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
 	private static boolean relOp()throws ParseException{
 		switch (nextToken) {
-			case EQUAL: case NOT_EQUAL: case LESS_THAN:
-			case GREATER_THAN: case LESS_THAN_EQUAL_TO: case GREATER_THAN_EQUAL_TO: {
+			case EQUAL: {
+				getNextToken();
+				relOpToUse = "EQUAL";
+				return true;
+			}
+			case NOT_EQUAL: {
+				relOpToUse = "NOT_EQUAL";
+				getNextToken();
+				return true;
+			}
+			case LESS_THAN: {
+				relOpToUse = "LESS_THAN";
+				getNextToken();
+				return true;
+			}
+			case GREATER_THAN: {
+				relOpToUse = "GREATER_THAN";
+				getNextToken();
+				return true;
+			}
+			case LESS_THAN_EQUAL_TO: {
+				relOpToUse = "LESS_THAN_EQUAL_TO";
+				getNextToken();
+				return true;
+			}
+			case GREATER_THAN_EQUAL_TO: {
+				relOpToUse = "GREATER_THAN_EQUAL_TO";
 				getNextToken();
 				return true;
 			}
@@ -282,15 +309,30 @@ public class Parser{
 
 	// <condition> := expression relOp expression
 	private static boolean condition() throws ParseException{
+		relOpToUse = null;
 		if (expression()){
+			int exp1 = (int) sas.top();
+			//message += "\nexp1 = "+exp1;
 			//System.out.println("\n<condition />");
 			//System.out.println("</expression>");
 			if (relOp()) {
 				//System.out.println("<relOp>");
+				message += "\nrel= "+relOpToUse;
 				if (expression()){
+					int exp2 = (int) sas.top();
+					switch (relOpToUse){
+						case "EQUAL":
+						{
+							if (exp1 == exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.top();
+							if (topNum == 1) message += "\ncondition is true";
+							else message += "\ncondition is false";
+						}
+					}
+					//message += "\nexp2 = "+exp2;
 					//System.out.println("</expression>");
 					return true;
-				}else return false;
+				}else throw new ParseException("Improper Expression ->"+nextStr);
 			}
 			else throw new ParseException("Missing relational operator");
 		}else return false;
@@ -348,7 +390,7 @@ public class Parser{
 	}
 	
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
-	private static boolean compoundStat()throws ParseException{
+	private static boolean compoundStat() throws ParseException{
 		if (nextToken == Token.BEGIN){
 			do{
 				getNextToken();
