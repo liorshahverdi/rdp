@@ -14,6 +14,7 @@ public class Parser{
 	private static Scanner fileReader = null;
 	private static String nextStr;
 	private static String relOpToUse;
+	private static boolean skipElse;
 	private static Token nextToken;
 	private static String[] lexemeArray;
 	private static int lexArrLen;
@@ -92,6 +93,7 @@ public class Parser{
 	private static void init(){
 		message = "";
 		relOpToUse = null;
+		skipElse = false;
 		lexemeIndex = 0;
 		lexemeArray = fileReader.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
@@ -105,6 +107,13 @@ public class Parser{
 	private static void commenceParsing() throws ParseException{
 		if (program()){
 			message += "\nProgram is Syntactically Correct!\n";
+
+			//if semantics were implemented properly this
+			//while loop should never be entered into
+			while (!sas.isEmpty()){
+				int topJunk = (int) sas.pop();
+				message += "\nPopped off top: "+topJunk+"\n";
+			}
 		}
 		else {
 			message += "Syntax Error!\tnextStr = "+nextStr;
@@ -264,7 +273,8 @@ public class Parser{
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
-		message += "\nTOP OF STACK -> "+sas.top().toString();
+		message += "\nEnd of expression";
+		message += "\n<- TOP OF STACK -> "+sas.top().toString();
 		return true;
 	}
 
@@ -311,23 +321,25 @@ public class Parser{
 	private static boolean condition() throws ParseException{
 		relOpToUse = null;
 		if (expression()){
-			int exp1 = (int) sas.top();
+			int exp1 = (int) sas.pop();
 			//message += "\nexp1 = "+exp1;
 			//System.out.println("\n<condition />");
 			//System.out.println("</expression>");
 			if (relOp()) {
 				//System.out.println("<relOp>");
-				message += "\nrel= "+relOpToUse;
+				//message += "\nrel= "+relOpToUse;
 				if (expression()){
-					int exp2 = (int) sas.top();
+					int exp2 = (int) sas.pop();
 					switch (relOpToUse){
 						case "EQUAL":
 						{
 							if (exp1 == exp2) sas.push(1); else sas.push(0);
-							int topNum = (int) sas.top();
-							if (topNum == 1) message += "\ncondition is true";
+							int topNum = (int) sas.pop();
+							if (topNum == 1) skipElse = true;
 							else message += "\ncondition is false";
+							break;
 						}
+
 					}
 					//message += "\nexp2 = "+exp2;
 					//System.out.println("</expression>");
@@ -367,6 +379,7 @@ public class Parser{
 			getNextToken();
 			if (condition()) {
 				//System.out.print("</condition>");
+				message += "\nskipElse: "+skipElse+"\n";
 				if (nextToken == Token.THEN) {
 					//System.out.print("<then>");
 					getNextToken();
@@ -383,10 +396,7 @@ public class Parser{
 					}else return false;
 				}else throw new ParseException("Missing Then Token!");
 			}else return false;
-		}
-		else {
-			return false;
-		}
+		}else return false;
 	}
 	
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
@@ -437,11 +447,16 @@ public class Parser{
 				getNextToken();
 				if (expression()){
 					//System.out.print("</expression>");
-					int expressionRes = (int) sas.pop();
-					listOfVars.put(identifier, expressionRes);
-					message += "\nKey-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString();
-					message += "\nEnd of asgnStmt\n";
-					return true;
+					if (skipElse) { skipElse = false; return true; }
+					else
+					{
+						int expressionRes = (int) sas.pop();
+						listOfVars.put(identifier, expressionRes);
+						message += "\nKey-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString();
+						message += "\nEnd of asgnStmt\n";
+						return true;
+					}
+					
 				}else return false;
 			}else throw new ParseException("Missing Assign Equals Token");
 		}else return false;
@@ -449,6 +464,7 @@ public class Parser{
 
 	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
 	private static boolean statement() throws ParseException{
+		message += "\n what is skipelse : "+skipElse;
 		//System.out.println("\n<stmt />");
 		if (assignmentStat()) { 
 			//System.out.print("\n</asgnStmt>");
