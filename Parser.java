@@ -14,7 +14,8 @@ public class Parser{
 	private static Scanner fileReader = null;
 	private static String nextStr;
 	private static String relOpToUse;
-	private static boolean skipElse;
+	private static boolean selectSkip;
+	private static boolean camefromSelect;
 	private static Token nextToken;
 	private static String[] lexemeArray;
 	private static int lexArrLen;
@@ -93,7 +94,8 @@ public class Parser{
 	private static void init(){
 		message = "";
 		relOpToUse = null;
-		skipElse = false;
+		selectSkip = false;
+		camefromSelect = false;
 		lexemeIndex = 0;
 		lexemeArray = fileReader.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
@@ -108,12 +110,6 @@ public class Parser{
 		if (program()){
 			message += "\nProgram is Syntactically Correct!\n";
 
-			//if semantics were implemented properly this
-			//while loop should never be entered into
-			while (!sas.isEmpty()){
-				int topJunk = (int) sas.pop();
-				message += "\nPopped off top: "+topJunk+"\n";
-			}
 		}
 		else {
 			message += "Syntax Error!\tnextStr = "+nextStr;
@@ -162,9 +158,12 @@ public class Parser{
 		//Object val = listOfVars.get(nextStr);
 		if (listOfVars.get(nextStr) instanceof Integer){
 			try{
-				int identVal = (int) listOfVars.get(nextStr);
-				//System.out.println("idval = "+identVal);
-				sas.push(identVal);
+				if (selectSkip){
+					int identVal = (int) listOfVars.get(nextStr);
+					//System.out.println("idval = "+identVal);
+					sas.push(identVal);
+				}
+				
 			} catch (NullPointerException e){System.out.println(e);}
 		}		
 	}
@@ -184,6 +183,7 @@ public class Parser{
 		}
 		else if (nextToken == Token.NUMBER) {
 			//System.out.print("<ident>");
+			//message += "\n 1 above->"+nextStr+"\tselectSkip->"+selectSkip;
 			pushNumberTokenValue();
 			getNextToken();
 			return true;
@@ -217,6 +217,7 @@ public class Parser{
 					getNextToken();
 					if (factor()) {
 						int op1 = (int) sas.pop();
+						if (op1 == 0) throw new ParseException("Arithmetic Error - Division by Zero. Think about it. What did you expect would happen?");
 						int op2 = (int) sas.pop(); 
 						sas.push(op2/op1);
 						continue;
@@ -273,8 +274,8 @@ public class Parser{
 				continue;
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
-		message += "\nEnd of expression";
-		message += "\n<- TOP OF STACK -> "+sas.top().toString();
+		//message += "\nEnd of expression";
+		message += "\n<- TOP OF STACK -> "+sas.top().toString()+"<-";
 		return true;
 	}
 
@@ -335,18 +336,50 @@ public class Parser{
 						{
 							if (exp1 == exp2) sas.push(1); else sas.push(0);
 							int topNum = (int) sas.pop();
-							if (topNum == 1) skipElse = true;
-							else message += "\ncondition is false";
+							if (topNum == 1) selectSkip = true;
 							break;
 						}
-
+						case "NOT_EQUAL":
+						{
+							if (exp1 != exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.pop();
+							if (topNum == 1) selectSkip = true;
+							break;
+						}
+						case "LESS_THAN":
+						{
+							if (exp1 < exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.pop();
+							if (topNum == 1) selectSkip = true;
+							break;
+						}
+						case "GREATER_THAN":
+						{
+							if (exp1 > exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.pop();
+							if (topNum == 1) selectSkip = true;
+							break;
+						}
+						case "LESS_THAN_EQUAL_TO":
+						{
+							if (exp1 <= exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.pop();
+							if (topNum == 1) selectSkip = true;
+							break;
+						}
+						case "GREATER_THAN_EQUAL_TO":
+						{
+							if (exp1 >= exp2) sas.push(1); else sas.push(0);
+							int topNum = (int) sas.pop();
+							if (topNum == 1) selectSkip = true;
+							break;
+						}
 					}
 					//message += "\nexp2 = "+exp2;
 					//System.out.println("</expression>");
 					return true;
 				}else throw new ParseException("Improper Expression ->"+nextStr);
-			}
-			else throw new ParseException("Missing relational operator");
+			}else throw new ParseException("Missing relational operator");
 		}else return false;
 	}
 	
@@ -379,24 +412,46 @@ public class Parser{
 			getNextToken();
 			if (condition()) {
 				//System.out.print("</condition>");
-				message += "\nskipElse: "+skipElse+"\n";
+				message += "\ncondition: "+selectSkip+"\n";
 				if (nextToken == Token.THEN) {
 					//System.out.print("<then>");
 					getNextToken();
-					if (statement()) {
-						//System.out.print("\n</stmt>");
-						if (nextToken == Token.ELSE) {
-							//System.out.print("\n<else>");
-							getNextToken();
-							if (statement()){
-								//System.out.print("</stmt>");
-								return true;
-							}else return false;
-						}else throw new ParseException("Missing Else Token!");
-					}else return false;
+					if (!selectSkip){
+						skipTo(Token.ELSE);
+						getNextToken();
+						//message += "\npassed else : "+nextStr;
+						selectSkip = true;
+						camefromSelect = true;
+						if (statement()) return true;
+						else return false;
+					}
+					else {
+						camefromSelect = true;
+						if (statement()) {
+							//skipTo(Token.ELSE);
+							//System.out.print("\n</stmt>");
+							if (nextToken == Token.ELSE) {
+								//System.out.print("\n<else>");
+								getNextToken();
+								if (statement()){
+									camefromSelect = false;
+									//System.out.print("</stmt>");
+									return true;
+								}else return false;
+							}else throw new ParseException("Missing Else Token!");
+						}else return false;
+					}
+					
 				}else throw new ParseException("Missing Then Token!");
 			}else return false;
 		}else return false;
+	}
+
+	private static void skipTo(Token destination) throws ParseException{
+		while (nextToken != destination){ 
+			//message += "\ni'm in skip to "+nextStr;			
+			getNextToken(); 
+		}
 	}
 	
 	// <compoundStat> := 'begin' statement { ; statement } 'end' 
@@ -447,16 +502,15 @@ public class Parser{
 				getNextToken();
 				if (expression()){
 					//System.out.print("</expression>");
-					if (skipElse) { skipElse = false; return true; }
-					else
-					{
+					//message += "\nin asgnStmt skipElse: "+selectSkip;
+					if (selectSkip || !camefromSelect){
 						int expressionRes = (int) sas.pop();
 						listOfVars.put(identifier, expressionRes);
-						message += "\nKey-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString();
-						message += "\nEnd of asgnStmt\n";
+						selectSkip = false;
+						message += "\nKey-> "+identifier+"\t\tValue-> "+listOfVars.get(identifier).toString()+"\nEnd of asgnStmt\n";
 						return true;
 					}
-					
+					else return true;
 				}else return false;
 			}else throw new ParseException("Missing Assign Equals Token");
 		}else return false;
@@ -464,7 +518,6 @@ public class Parser{
 
 	// <statement> := assignmentStat | procedureCallStat | compoundStat | selectionStat | iterativeStat 
 	private static boolean statement() throws ParseException{
-		message += "\n what is skipelse : "+skipElse;
 		//System.out.println("\n<stmt />");
 		if (assignmentStat()) { 
 			//System.out.print("\n</asgnStmt>");
