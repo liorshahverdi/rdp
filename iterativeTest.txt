@@ -1,0 +1,1 @@
+begin lcv := 3 ; k := 0 ; while lcv > k do lcv := lcv - 1 end $
