@@ -16,8 +16,6 @@ public class Parser{
 	private static Token relOpToUse;
 	private static boolean selectSkip;
 	private static boolean camefromSelect;
-	private static boolean camefromIterativeStmt;
-	private static boolean iterativeConditionResult;
 	private static Token nextToken;
 	private static String[] lexemeArray;
 	private static int lexArrLen;
@@ -98,8 +96,6 @@ public class Parser{
 		relOpToUse = null;
 		selectSkip = false;
 		camefromSelect = false;
-		iterativeConditionResult = false;
-		camefromIterativeStmt = false;
 		lexemeIndex = 0;
 		lexemeArray = fileReader.nextLine().split(" ");
 		lexArrLen = lexemeArray.length;
@@ -279,9 +275,8 @@ public class Parser{
 			}else return false;
 		} while (nextToken == Token.PLUS || nextToken == Token.MINUS);
 		//message += "\nEnd of expression";
-		if (!iterativeConditionResult){
-			message += "\n<- TOP OF STACK -> "+sas.top().toString()+" <-";
-		}return true;
+		message += "\n<- TOP OF STACK -> "+sas.top().toString()+"<-";
+		return true;
 	}
 
 	// <relOp> := '=' | '!=' | '<' | '>' | '<=' | '>='
@@ -326,16 +321,8 @@ public class Parser{
 	// <condition> := expression relOp expression
 	private static boolean condition() throws ParseException{
 		relOpToUse = null;
-		Integer exp1 = null;
-
 		if (expression()){
-			exp1 = (int) sas.pop();
-			/*if (exp1 == null){
-				exp1 = (int) listOfVars.get(nextStr);
-				message += "i think were popping.."+exp1;
-				if (exp1 == null) {throw new ParseException("Cannot find value for symbol: "+nextStr);}
-			}*/
-
+			int exp1 = (int) sas.pop();
 			//message += "\nexp1 = "+exp1;
 			//System.out.println("\n<condition />");
 			//System.out.println("</expression>");
